@@ -1,0 +1,162 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guía de Códigos de Barras — ITF-14</h1>
+<hr />
+<h2>Qué es y para qué sirve</h2>
+<p>El <strong>ITF-14</strong> es un código de barras pensado para <strong>cajas, palés y envases de<br />
+transporte</strong> (no para el producto en el lineal). Es el "código grande de la<br />
+logística": se imprime directamente sobre el cartón y se usa para identificar la<br />
+<strong>unidad de envío</strong> (una caja que contiene varias unidades). Suelen leerlo escáneres de<br />
+almacén.</p>
+<p>Se basa en la simbología <em>Interleaved 2 of 5</em>, pero con un tamaño y un formato fijos<br />
+pensados para el transporte.</p>
+<h2>Que guarda el código</h2>
+<p><strong>GTIN-14</strong> (14 dígitos) normalmente, o <strong>GTIN-13</strong> (13 dígitos) que el programa<br />
+convierte. Solo <strong>números</strong>. El último dígito es el <strong>dígito de control</strong>.</p>
+<ul>
+<li><strong>GTIN-14</strong>: exactamente 14 dígitos. El <strong>primer dígito</strong> es el <em>indicador</em> (0 a 8)<br />
+  que suele distinguir niveles de la caja (p. ej. <code>1</code> = caja, <code>2</code> = palé…).</li>
+<li><strong>GTIN-13</strong>: exactamente 13 dígitos. Si lo eliges, el programa le <strong>añade un 0 al<br />
+  inicio</strong> y recalcula el dígito de control para convertirlo en GTIN-14.</li>
+</ul>
+<blockquote>
+<p>El diálogo te deja elegir entre GTIN-14 y GTIN-13 según el dato que tengas.</p>
+</blockquote>
+<h2>Tipo de impresora</h2>
+<p>El ITF-14 imprime su texto según el tipo de impresión elegido (<strong>Flexo, Térmica o<br />
+Láser</strong>). Esto ajusta automáticamente las <strong>dimensiones mínimas</strong> del código (altura y<br />
+el grosor del borde, la "barra de soporte" alrededor) para que se pueda leer según el<br />
+método de impresión.</p>
+<ul>
+<li><strong>Flexo</strong> (impresión en cartón): necesita el código más grande y un borde más<br />
+  grueso.</li>
+<li><strong>Térmica / Láser</strong>: admiten un código más pequeño y un borde más fino.</li>
+</ul>
+<p>Solo tienes que elegir cómo vas a imprimir; el programa ya propone los mínimos<br />
+correctos para ese método.</p>
+<h2>El texto legible</h2>
+<p>Bajo el código se muestra el número <strong>formateado en bloques</strong> al estilo logístico,<br />
+p. ej. <code>1 08 1234 567008 8</code> (agrupado como manda el estándar). Puedes colocarlo<br />
+<strong>debajo o encima</strong> del código, y ajustar su tamaño con la casilla <strong>Cuerpo</strong>.</p>
+<p>Este texto se dibuja con la fuente del código (OCR por defecto), sin necesidad de<br />
+elegir letra.</p>
+<h2>Valor de muestra y columna Excel</h2>
+<p>Por defecto muestra un valor de ejemplo. También puedes usar una <strong>columna de<br />
+Excel</strong>: al seleccionarla se validan <strong>todas las filas</strong> y, si alguna está <strong>vacía</strong>,<br />
+<strong>no tiene los dígitos correctos</strong> o <strong>el dígito de control falla</strong> (según sea GTIN-14<br />
+o GTIN-13), aparece en el visor del diálogo indicando qué fila tiene el problema.</p>
+<h2>El origen de los datos</h2>
+<p>Como en todas las simbologías, el valor del código puede salir de tres sitios:</p>
+<table>
+<thead>
+<tr>
+<th>Origen</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Texto fijo</strong></td>
+<td>Escribes el valor a mano en el perfil</td>
+</tr>
+<tr>
+<td><strong>Columna de datos externos</strong></td>
+<td>El valor viene de una columna de Excel/CSV, fila a fila</td>
+</tr>
+<tr>
+<td><strong>Numeración interna</strong></td>
+<td>El valor se genera con una máscara (p. ej. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Para las 3 se aplican las mismas reglas del código (tamaño, tipo de impresora, etc.).</p>
+<h2>Campos del diálogo</h2>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ancho</strong></td>
+<td>Tamaño horizontal del código</td>
+</tr>
+<tr>
+<td><strong>Alto</strong></td>
+<td>Altura del código</td>
+</tr>
+<tr>
+<td><strong>Cuerpo</strong></td>
+<td>Tamaño de letra del texto legible. <strong>0 = sin texto</strong></td>
+</tr>
+<tr>
+<td><strong>Posición</strong></td>
+<td>Lugar del texto: <strong>debajo</strong> o <strong>encima</strong> del código</td>
+</tr>
+<tr>
+<td><strong>Distancia</strong></td>
+<td>Espacio entre el código y el texto</td>
+</tr>
+<tr>
+<td><strong>Tipo</strong></td>
+<td>GTIN-14 (14 dígitos) o GTIN-13 (13 dígitos)</td>
+</tr>
+<tr>
+<td><strong>Impresora</strong></td>
+<td>Flexo / Térmica / Láser (ajusta los mínimos)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Para ocultar el texto legible, pon Cuerpo en 0</strong>: el código se queda solo,<br />
+sin texto alrededor.</p>
+</blockquote>
+<h2>Errores típicos</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Debe tener 14 dígitos</td>
+<td>El GTIN-14 tiene otra longitud</td>
+<td>Comprueba la cifra (14 dígitos)</td>
+</tr>
+<tr>
+<td>Debe tener 13 dígitos</td>
+<td>El GTIN-13 tiene otra longitud</td>
+<td>Comprueba la cifra (13 dígitos)</td>
+</tr>
+<tr>
+<td>El dígito de control no coincide</td>
+<td>Última cifra mal calculada</td>
+<td>Recalcula el dígito de control</td>
+</tr>
+<tr>
+<td>Dato vacío en columna</td>
+<td>Alguna fila no tiene valor</td>
+<td>Rellena la fila o quita esa fila de la columna</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

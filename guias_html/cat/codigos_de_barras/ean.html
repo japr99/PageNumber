@@ -1,0 +1,183 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guia de Codis de Barres — EAN-13 / EAN-8 / EAN-5</h1>
+<hr />
+<h2>Què és i per a què serveix</h2>
+<p>El <strong>EAN</strong> és la família de codis de barres més coneguda, la que es veu en <strong>gairebé<br />
+tot producte de supermercat i botiga</strong>. És un codi numèric de barres verticals.<br />
+Segons la variant:</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Dígits</th>
+<th>Per a què s'usa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>EAN-13</strong></td>
+<td>13</td>
+<td>Codi estàndard de producte</td>
+</tr>
+<tr>
+<td><strong>EAN-8</strong></td>
+<td>8</td>
+<td>Productes petits amb poc espai</td>
+</tr>
+<tr>
+<td><strong>EAN-5</strong></td>
+<td>5</td>
+<td>Complement de preu (sol anar junt amb un EAN-13)</td>
+</tr>
+</tbody>
+</table>
+<h2>Què guarda el codi</h2>
+<p>Només <strong>números</strong> (sense lletres ni símbols). L'últim dígit és el <strong>dígit de<br />
+control</strong>: es calcula sol perquè el lector sàpiga si el codi s'ha llegit bé.</p>
+<ul>
+<li><strong>EAN-13</strong>: 13 dígits. El primer dígit <strong>no pot ser 0</strong>. Si escrius 12 dígits,<br />
+  el programa calcula el dígit de control; si n'escrius 13, el comprova.</li>
+<li><strong>Els primers dígits identifiquen el país</strong> (sistema de numeració): per<br />
+    exemple, els codis que comencen per <strong>84</strong> són d'<strong>Espanya</strong>. És una dada que va<br />
+    dins del propi codi i el programa la respecta tal qual.</li>
+<li><strong>EAN-8</strong>: 8 dígits. Si escrius 7, el programa calcula el dígit de control; si<br />
+  n'escrius 8, el comprova.</li>
+<li><strong>EAN-5</strong>: exactament 5 dígits. No té dígit de control propi; s'usa com a<br />
+  complement (per exemple per indicar el preu).</li>
+</ul>
+<blockquote>
+<p>Al diàleg pots escriure 13 (o 8) dígits complets, o deixar que el programa<br />
+calculi el dígit de control.</p>
+</blockquote>
+<h2>Valor de mostra i columna Excel</h2>
+<p>Per defecte mostra un valor d'exemple. També pots fer servir una <strong>columna<br />
+d'Excel</strong>: en seleccionar-la es validen <strong>totes les files</strong> i, si alguna és <strong>buida</strong>,<br />
+<strong>no té els dígits correctes</strong> o <strong>el dígit de control falla</strong>, apareix al<br />
+visor del diàleg indicant quina fila té el problema.</p>
+<h2>L'origen de les dades</h2>
+<p>Com en totes les simbologies, el valor del codi pot sortir de tres llocs:</p>
+<table>
+<thead>
+<tr>
+<th>Origen</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Text fix</strong></td>
+<td>Escrius el valor a mà al perfil</td>
+</tr>
+<tr>
+<td><strong>Columna de dades externes</strong></td>
+<td>El valor ve d'una columna d'Excel/CSV, fila a fila</td>
+</tr>
+<tr>
+<td><strong>Numeració interna</strong></td>
+<td>El valor es genera amb una màscara (p. ex. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Per a les 3 s'apliquen les mateixes regles del codi (mida, etc.).</p>
+<h2>Els dígits del codi</h2>
+<p>En el EAN els <strong>números van dins del codi</strong>, entre les barres, com a part del<br />
+propi símbol (no és un bloc de text a part que puguis moure). Ajustes la seva mida<br />
+amb la casella <strong>Cos</strong>.</p>
+<h2>Camps del diàleg</h2>
+<table>
+<thead>
+<tr>
+<th>Camp</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Amplada</strong></td>
+<td>Mida horitzontal del codi</td>
+</tr>
+<tr>
+<td><strong>Alçada</strong></td>
+<td>Alçada del codi</td>
+</tr>
+<tr>
+<td><strong>Font</strong></td>
+<td>Tipus de lletra dels dígits del codi</td>
+</tr>
+<tr>
+<td><strong>Cos</strong></td>
+<td>Mida de lletra dels dígits. <strong>0 = sense text</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Per al <strong>EAN-5</strong> també hi ha un camp <strong>Distància</strong> per separar el codi del<br />
+complement.</p>
+<p>A diferència del QR, el PDF417 o el Code 128, en el EAN <strong>no</strong> es pot moure el<br />
+text al voltant del codi: els dígits van fixos dins de les barres.</p>
+<h2>El tipus de lletra dels dígits (Font)</h2>
+<p>Els dígits del codi es dibuixen amb la lletra que triïs al camp <strong>Font</strong>.</p>
+<p>Les lletres <strong>OCR</strong> (OCR-A, OCR-B i les seves variants) són les clàssiques dels codis de<br />
+barres: cada xifra està dissenyada perquè el lector la distingeixi sense errors. <strong>No<br />
+inclouen caràcters especials</strong> (la <strong>ñ</strong>, accents com ara á/é, ni símbols); és una<br />
+tipografia pròpia del codi de barres. Com que el EAN és <strong>només números</strong>, l'OCR és la<br />
+recomanada. Si el teu text necessités caràcters especials, faries servir Helvetica (a Mac)<br />
+o Arial (a Windows), que són les fonts normals i sí que els tenen — tot i que al EAN<br />
+només hi caben dígits.</p>
+<h2>Errors típics</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solució</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ha de tenir 12 o 13 dígits</td>
+<td>El EAN-13 té una altra longitud</td>
+<td>Comprova la xifra (13 dígits)</td>
+</tr>
+<tr>
+<td>Ha de tenir 7 o 8 dígits</td>
+<td>El EAN-8 té una altra longitud</td>
+<td>Comprova la xifra (8 dígits)</td>
+</tr>
+<tr>
+<td>El primer dígit no pot ser 0</td>
+<td>EAN-13 que comença per 0</td>
+<td>Aquest rang és per a un altre codi; canvia el primer dígit</td>
+</tr>
+<tr>
+<td>El dígit de control no coincideix</td>
+<td>Última xifra mal calculada</td>
+<td>Recalcula el dígit de control o deixa que el programa ho faci</td>
+</tr>
+<tr>
+<td>Ha de tenir exactament 5 dígits</td>
+<td>El EAN-5 té una altra longitud</td>
+<td>Comprova la xifra (5 dígits)</td>
+</tr>
+<tr>
+<td>Dada buida a la columna</td>
+<td>Alguna fila no té valor</td>
+<td>Omple la fila o treu aquesta fila de la columna</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

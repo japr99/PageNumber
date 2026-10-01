@@ -1,0 +1,183 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guía de Códigos de Barras — EAN-13 / EAN-8 / EAN-5</h1>
+<hr />
+<h2>Qué es y para qué sirve</h2>
+<p>El <strong>EAN</strong> es la familia de códigos de barras más conocida, la que se ve en <strong>casi<br />
+todo producto de supermercado y tienda</strong>. Es un código numérico de barras verticales.<br />
+Según la variante:</p>
+<table>
+<thead>
+<tr>
+<th>Variante</th>
+<th>Dígitos</th>
+<th>Para qué se usa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>EAN-13</strong></td>
+<td>13</td>
+<td>Código estándar de producto</td>
+</tr>
+<tr>
+<td><strong>EAN-8</strong></td>
+<td>8</td>
+<td>Productos pequeños con poco espacio</td>
+</tr>
+<tr>
+<td><strong>EAN-5</strong></td>
+<td>5</td>
+<td>Complemento de precio (suele ir junto a un EAN-13)</td>
+</tr>
+</tbody>
+</table>
+<h2>Qué guarda el código</h2>
+<p>Solo <strong>números</strong> (sin letras ni símbolos). El último dígito es el <strong>dígito de<br />
+control</strong>: se calcula solo para que el lector sepa si el código se ha leído bien.</p>
+<ul>
+<li><strong>EAN-13</strong>: 13 dígitos. El primer dígito <strong>no puede ser 0</strong>. Si escribes 12 dígitos,<br />
+  el programa calcula el dígito de control; si escribes 13, lo comprueba.</li>
+<li><strong>Los primeros dígitos identifican el país</strong> (sistema de numeración): por<br />
+    ejemplo, los códigos que empiezan por <strong>84</strong> son de <strong>España</strong>. Es un dato que va<br />
+    dentro del propio código y el programa lo respeta tal cual.</li>
+<li><strong>EAN-8</strong>: 8 dígitos. Si escribes 7, el programa calcula el dígito de control; si<br />
+  escribes 8, lo comprueba.</li>
+<li><strong>EAN-5</strong>: exactamente 5 dígitos. No tiene dígito de control propio; se usa como<br />
+  complemento (por ejemplo para indicar el precio).</li>
+</ul>
+<blockquote>
+<p>En el diálogo puedes escribir 13 (o 8) dígitos completos, o dejar que el programa<br />
+calcule el dígito de control.</p>
+</blockquote>
+<h2>Valor de muestra y columna Excel</h2>
+<p>Por defecto muestra un valor de ejemplo. También puedes usar una <strong>columna de<br />
+Excel</strong>: al seleccionarla se validan <strong>todas las filas</strong> y, si alguna está <strong>vacía</strong>,<br />
+<strong>no tiene los dígitos correctos</strong> o <strong>el dígito de control falla</strong>, aparece en el<br />
+visor del diálogo indicando qué fila tiene el problema.</p>
+<h2>El origen de los datos</h2>
+<p>Como en todas las simbologías, el valor del código puede salir de tres sitios:</p>
+<table>
+<thead>
+<tr>
+<th>Origen</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Texto fijo</strong></td>
+<td>Escribes el valor a mano en el perfil</td>
+</tr>
+<tr>
+<td><strong>Columna de datos externos</strong></td>
+<td>El valor viene de una columna de Excel/CSV, fila a fila</td>
+</tr>
+<tr>
+<td><strong>Numeración interna</strong></td>
+<td>El valor se genera con una máscara (p. ej. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Para las 3 se aplican las mismas reglas del código (tamaño, etc.).</p>
+<h2>Los dígitos del código</h2>
+<p>En el EAN los <strong>números van dentro del código</strong>, entre las barras, como parte del<br />
+propio símbolo (no es un bloque de texto aparte que puedas mover). Ajustas su tamaño<br />
+con la casilla <strong>Cuerpo</strong>.</p>
+<h2>Campos del diálogo</h2>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ancho</strong></td>
+<td>Tamaño horizontal del código</td>
+</tr>
+<tr>
+<td><strong>Alto</strong></td>
+<td>Altura del código</td>
+</tr>
+<tr>
+<td><strong>Fuente</strong></td>
+<td>Tipo de letra de los dígitos del código</td>
+</tr>
+<tr>
+<td><strong>Cuerpo</strong></td>
+<td>Tamaño de letra de los dígitos. <strong>0 = sin texto</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Para el <strong>EAN-5</strong> hay también un campo <strong>Distancia</strong> para separar el código del<br />
+complemento.</p>
+<p>A diferencia del QR, el PDF417 o el Code 128, en el EAN <strong>no</strong> se puede mover el<br />
+texto alrededor del código: los dígitos van fijos dentro de las barras.</p>
+<h2>El tipo de letra de los dígitos (Fuente)</h2>
+<p>Los dígitos del código se dibujan con la letra que elijas en el campo <strong>Fuente</strong>.</p>
+<p>Las letras <strong>OCR</strong> (OCR-A, OCR-B y sus variantes) son las clásicas de los códigos de<br />
+barras: cada cifra está diseñada para que el lector la distinga sin errores. <strong>No<br />
+incluyen caracteres especiales</strong> (la <strong>ñ</strong>, acentos como á/é, ni símbolos); es una<br />
+tipografía propia del código de barras. Como el EAN es <strong>solo números</strong>, la OCR es la<br />
+recomendada. Si tu texto necesitara caracteres especiales, usarías Helvetica (en Mac)<br />
+o Arial (en Windows), que son las fuentes normales y sí los tienen — aunque en el EAN<br />
+solo entran dígitos.</p>
+<h2>Errores típicos</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Debe tener 12 o 13 dígitos</td>
+<td>El EAN-13 tiene otra longitud</td>
+<td>Comprueba la cifra (13 dígitos)</td>
+</tr>
+<tr>
+<td>Debe tener 7 u 8 dígitos</td>
+<td>El EAN-8 tiene otra longitud</td>
+<td>Comprueba la cifra (8 dígitos)</td>
+</tr>
+<tr>
+<td>El primer dígito no puede ser 0</td>
+<td>EAN-13 empezando por 0</td>
+<td>Ese rango es para otro código; cambia el primer dígito</td>
+</tr>
+<tr>
+<td>El dígito de control no coincide</td>
+<td>Última cifra mal calculada</td>
+<td>Recalcula el dígito de control o deja que el programa lo haga</td>
+</tr>
+<tr>
+<td>Debe tener exactamente 5 dígitos</td>
+<td>El EAN-5 tiene otra longitud</td>
+<td>Comprueba la cifra (5 dígitos)</td>
+</tr>
+<tr>
+<td>Dato vacío en columna</td>
+<td>Alguna fila no tiene valor</td>
+<td>Rellena la fila o quita esa fila de la columna</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

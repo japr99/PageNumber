@@ -1,0 +1,162 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Barcode Guide — ITF-14</h1>
+<hr />
+<h2>What is it and what is it used for</h2>
+<p>The <strong>ITF-14</strong> is a barcode designed for <strong>cases, pallets, and transport<br />
+packaging</strong> (not for the product on the shelf). It is the "large logistics code":<br />
+it is printed directly on cardboard and is used to identify the<br />
+<strong>shipping unit</strong> (a box containing multiple units). It is usually read by warehouse<br />
+scanners.</p>
+<p>It is based on the <em>Interleaved 2 of 5</em> symbology, but with a fixed size and format<br />
+designed for transport.</p>
+<h2>What the code stores</h2>
+<p><strong>GTIN-14</strong> (14 digits) normally, or <strong>GTIN-13</strong> (13 digits) which the program<br />
+converts. <strong>Numbers only</strong>. The last digit is the <strong>check digit</strong>.</p>
+<ul>
+<li><strong>GTIN-14</strong>: exactly 14 digits. The <strong>first digit</strong> is the <em>indicator</em> (0 to 8)<br />
+  that usually distinguishes case levels (e.g. <code>1</code> = case, <code>2</code> = pallet…).</li>
+<li><strong>GTIN-13</strong>: exactly 13 digits. If you choose this, the program <strong>adds a 0 at the<br />
+  beginning</strong> and recalculates the check digit to convert it to GTIN-14.</li>
+</ul>
+<blockquote>
+<p>The dialog lets you choose between GTIN-14 and GTIN-13 depending on your data.</p>
+</blockquote>
+<h2>Printer type</h2>
+<p>ITF-14 prints its text according to the chosen print method (<strong>Flexo, Thermal, or<br />
+Laser</strong>). This automatically adjusts the <strong>minimum dimensions</strong> of the code (height and<br />
+border thickness, the "support bar" around it) so it can be read based on the<br />
+printing method.</p>
+<ul>
+<li><strong>Flexo</strong> (cardboard printing): requires the code to be larger and the border to be<br />
+  thicker.</li>
+<li><strong>Thermal / Laser</strong>: allow a smaller code and a thinner border.</li>
+</ul>
+<p>You just need to choose how you are going to print; the program already proposes the correct<br />
+minimums for that method.</p>
+<h2>Human-readable text</h2>
+<p>Below the code, the number is displayed <strong>formatted in blocks</strong> in the logistics<br />
+style, e.g. <code>1 08 1234 567008 8</code> (grouped as the standard dictates). You can place it<br />
+<strong>below or above</strong> the code and adjust its size with the <strong>Body</strong> field.</p>
+<p>This text is drawn with the code's font (OCR by default), without the need to<br />
+choose a typeface.</p>
+<h2>Sample value and Excel column</h2>
+<p>By default it shows an example value. You can also use an <strong>Excel<br />
+column</strong>: when you select one, <strong>all rows</strong> are validated and, if any row is <strong>empty</strong>,<br />
+<strong>does not have the correct digits</strong>, or <strong>the check digit fails</strong> (depending on whether it is GTIN-14<br />
+or GTIN-13), it appears in the dialog viewer indicating which row has the problem.</p>
+<h2>Data source</h2>
+<p>As with all symbologies, the code value can come from three sources:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fixed text</strong></td>
+<td>You type the value manually in the profile</td>
+</tr>
+<tr>
+<td><strong>External data column</strong></td>
+<td>The value comes from an Excel/CSV column, row by row</td>
+</tr>
+<tr>
+<td><strong>Internal numbering</strong></td>
+<td>The value is generated using a mask (e.g. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>The same code rules (size, printer type, etc.) apply to all three.</p>
+<h2>Dialog fields</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Width</strong></td>
+<td>Horizontal size of the code</td>
+</tr>
+<tr>
+<td><strong>Height</strong></td>
+<td>Height of the code</td>
+</tr>
+<tr>
+<td><strong>Body</strong></td>
+<td>Font size of the human-readable text. <strong>0 = no text</strong></td>
+</tr>
+<tr>
+<td><strong>Position</strong></td>
+<td>Text location: <strong>below</strong> or <strong>above</strong> the code</td>
+</tr>
+<tr>
+<td><strong>Distance</strong></td>
+<td>Space between the code and the text</td>
+</tr>
+<tr>
+<td><strong>Type</strong></td>
+<td>GTIN-14 (14 digits) or GTIN-13 (13 digits)</td>
+</tr>
+<tr>
+<td><strong>Printer</strong></td>
+<td>Flexo / Thermal / Laser (adjusts the minimums)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>To hide the human-readable text, set Body to 0</strong>: the code remains alone,<br />
+with no text around it.</p>
+</blockquote>
+<h2>Common errors</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Must have 14 digits</td>
+<td>The GTIN-14 has a different length</td>
+<td>Check the count (14 digits)</td>
+</tr>
+<tr>
+<td>Must have 13 digits</td>
+<td>The GTIN-13 has a different length</td>
+<td>Check the count (13 digits)</td>
+</tr>
+<tr>
+<td>Check digit does not match</td>
+<td>Last digit calculated incorrectly</td>
+<td>Recalculate the check digit</td>
+</tr>
+<tr>
+<td>Empty data in column</td>
+<td>A row has no value</td>
+<td>Fill in the row or remove that row from the column</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

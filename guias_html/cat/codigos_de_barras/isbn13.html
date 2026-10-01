@@ -1,0 +1,141 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guia de Codis de Barres — ISBN-13</h1>
+<hr />
+<h2>Què és i per a què serveix</h2>
+<p>El <strong>ISBN-13</strong> és el codi de barres dels <strong>llibres</strong>. És en realitat un <strong>EAN-13</strong><br />
+reservat per a la numeració de llibres (codi ISBN). Està pensat perquè llibreries,<br />
+editorials i magatzems identifiquin cada títol.</p>
+<p>Pot portar, a més del codi, una <strong>capçalera de text "ISBN"</strong> a sobre de les barres<br />
+perquè quedi clar que és un llibre.</p>
+<h2>Què guarda el codi</h2>
+<p>Només <strong>números</strong> (sense lletres ni símbols), i ha de complir dues regles:</p>
+<ul>
+<li><strong>Exactament 13 dígits</strong>.</li>
+<li><strong>Ha de començar per 978 o 979</strong> (és el prefix reservat per als llibres).</li>
+</ul>
+<p>L'últim dígit és el <strong>dígit de control</strong>, que es comprova perquè el lector sàpiga<br />
+si el codi s'ha llegit bé.</p>
+<h2>Valor de mostra i columna Excel</h2>
+<p>Per defecte mostra un valor d'exemple. També pots fer servir una <strong>columna<br />
+d'Excel</strong>: en seleccionar-la es validen <strong>totes les files</strong> i, si alguna és <strong>buida</strong>,<br />
+<strong>no té 13 dígits</strong>, <strong>no comença per 978/979</strong> o <strong>el dígit de control falla</strong>,<br />
+apareix al visor del diàleg indicant quina fila té el problema.</p>
+<h2>L'origen de les dades</h2>
+<p>Com en totes les simbologies, el valor del codi pot sortir de tres llocs:</p>
+<table>
+<thead>
+<tr>
+<th>Origen</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Text fix</strong></td>
+<td>Escrius el valor a mà al perfil</td>
+</tr>
+<tr>
+<td><strong>Columna de dades externes</strong></td>
+<td>El valor ve d'una columna d'Excel/CSV, fila a fila</td>
+</tr>
+<tr>
+<td><strong>Numeració interna</strong></td>
+<td>El valor es genera amb una màscara (p. ex. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Per a les 3 s'apliquen les mateixes regles del codi (mida, etc.).</p>
+<h2>La capçalera "ISBN" i els dígits</h2>
+<ul>
+<li>Els <strong>dígits van dins del codi</strong>, entre les barres (com a l'EAN).</li>
+<li>A més pots activar la <strong>capçalera "ISBN"</strong> que es dibuixa <strong>a sobre</strong> de les barres<br />
+  amb el text <code>ISBN + número</code>. S'activa o es desactiva amb el camp <strong>Capçalera</strong>.</li>
+</ul>
+<h2>Camps del diàleg</h2>
+<table>
+<thead>
+<tr>
+<th>Camp</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Amplada</strong></td>
+<td>Mida horitzontal del codi</td>
+</tr>
+<tr>
+<td><strong>Alçada</strong></td>
+<td>Alçada del codi</td>
+</tr>
+<tr>
+<td><strong>Font</strong></td>
+<td>Tipus de lletra dels dígits del codi</td>
+</tr>
+<tr>
+<td><strong>Cos</strong></td>
+<td>Mida de lletra dels dígits. <strong>0 = sense text</strong></td>
+</tr>
+<tr>
+<td><strong>Capçalera</strong></td>
+<td>Mostra o amaga el text "ISBN" a sobre de les barres</td>
+</tr>
+</tbody>
+</table>
+<h2>El tipus de lletra dels dígits (Font)</h2>
+<p>Els dígits del codi es dibuixen amb la lletra que triïs al camp <strong>Font</strong>.</p>
+<p>Les lletres <strong>OCR</strong> (OCR-A, OCR-B i les seves variants) són les clàssiques dels codis de<br />
+barres: cada xifra està dissenyada perquè el lector la distingeixi sense errors. <strong>No<br />
+inclouen caràcters especials</strong> (la <strong>ñ</strong>, accents com ara á/é, ni símbols); és una<br />
+tipografia pròpia del codi de barres. Com que l'ISBN és <strong>només números</strong>, l'OCR és la<br />
+recomanada. Si el teu text necessités caràcters especials, faries servir Helvetica (a Mac)<br />
+o Arial (a Windows), que són les fonts normals i sí que els tenen — tot i que a l'ISBN<br />
+només hi caben dígits.</p>
+<h2>Errors típics</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solució</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ha de tenir 13 dígits</td>
+<td>L'ISBN té una altra longitud</td>
+<td>Comprova la xifra (13 dígits)</td>
+</tr>
+<tr>
+<td>Ha de començar per 978 o 979</td>
+<td>El prefix no és de llibre</td>
+<td>Fes servir un ISBN vàlid (978/979)</td>
+</tr>
+<tr>
+<td>El dígit de control no coincideix</td>
+<td>Última xifra mal calculada</td>
+<td>Recalcula el dígit de control</td>
+</tr>
+<tr>
+<td>Dada buida a la columna</td>
+<td>Alguna fila no té valor</td>
+<td>Omple la fila o treu aquesta fila de la columna</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

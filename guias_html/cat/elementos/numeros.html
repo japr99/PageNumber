@@ -1,0 +1,88 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guia — Numeradors (Números)</h1>
+<h2>Què és i per a què serveix</h2>
+<p>Un numerador és un element de la maquetació que imprimeix un número que <strong>augmenta automàticament d'una peça a una altra</strong> (numeració en sèrie). S'usa per numerar tiquets, talons, comprovants, entrades o qualsevol imprès que necessiti una seqüència de números.</p>
+<p>Col·loques un numerador a la pàgina i el programa assigna a cada peça el seu número corresponent segons la posició i la tirada, sense que hagis d'escriure'ls a mà.</p>
+<h2>Com es calcula el número</h2>
+<p>La seqüència és <strong>global</strong> (val per a tota la tirada i afecta ambdues cares):</p>
+<ul>
+<li><strong>Número inicial</strong>: amb el qual comença la sèrie.</li>
+<li><strong>Número final</strong>: amb el qual acaba.</li>
+<li><strong>Increment</strong>: de quant en quant puja cada peça (normalment d'1 en 1).</li>
+<li><strong>Cap enrere</strong>: si la sèrie va en ordre invers (decreix en lloc de créixer).</li>
+<li><strong>Còpies</strong>: com es reparteixen els números entre les còpies de cada peça.</li>
+</ul>
+<p>El programa calcula el número de cada peça segons la pàgina on es troba, de manera que la seqüència queda contínua i correcta en tot l'imprès.</p>
+<h2>La màscara</h2>
+<p>La màscara defineix la <strong>forma</strong> del número amb el caràcter <code>0</code>. Cada <code>0</code> reserva una posició per a una xifra i els números curts es <strong>reomplen amb zeros</strong> a l'esquerra.</p>
+<table>
+<thead>
+<tr>
+<th>Màscara</th>
+<th>Exemple (número 5)</th>
+<th>Resultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0000</code></td>
+<td>5</td>
+<td><code>0005</code></td>
+</tr>
+<tr>
+<td><code>000</code></td>
+<td>5</td>
+<td><code>005</code></td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td>5</td>
+<td><code>5</code></td>
+</tr>
+</tbody>
+</table>
+<p>També pots combinar la màscara amb lletres o altres caràcters (<code>AB000</code> → <code>AB005</code>).</p>
+<h2>Perfils</h2>
+<p>Cada numerador utilitza un <strong>perfil de text</strong> que desa com es veu el número:</p>
+<ul>
+<li><strong>Font</strong> i <strong>estil</strong> (regular, negreta, cursiva…).</li>
+<li><strong>Mida</strong> de la lletra.</li>
+<li><strong>Colors</strong>: el del número, el del prefix i el del sufix es poden configurar per separat.</li>
+<li><strong>Prefix i sufix</strong>: text que s'imprimeix abans i després del número (p. ex. prefix <code>Nº</code>, sufix <code>/24</code>).</li>
+<li><strong>Separador de milers</strong>: activar-lo perquè els números llargs es vegin amb punts (o separador local).</li>
+<li><strong>Interlletratge</strong>: espai extra entre lletres.</li>
+</ul>
+<p>En crear un numerador s'utilitza el perfil <code>&lt;Default&gt;</code>; pots crear tants perfils com necessitis (cadascun amb la seva font, color i màscara) i triar quin aplica cada numerador.</p>
+<h2>Colors per a impremta</h2>
+<p>Cada color (número, prefix i sufix) es pot definir a l'<strong>espai de color</strong> que prefereixis segons el destí de l'imprès:</p>
+<ul>
+<li><strong>RGB</strong> (vermell, verd, blau): pensat per a <strong>pantalla</strong> (vista digital, previsualització). Si només imprimiràs en quatricromia, convé fer servir CMYK.</li>
+<li><strong>CMYK</strong> (cian, magenta, groc, negre): l'estàndard d'<strong>impressió digital i offset en quatricromia</strong>. És la manera habitual per a treballs comercials.</li>
+<li><strong>Tinta plana (SPOT / Pantone)</strong>: un <strong>color concret premesclat</strong> que s'imprimeix a la seva <strong>pròpia planxa</strong> amb la seva pròpia tinta. És la manera correcta per a <strong>colors corporatius o de marca</strong>, perquè reprodueix de manera exacta el color del logotip sense dependre de la mescla dels quatre.</li>
+</ul>
+<p>Per a les tintes planes pots:</p>
+<ul>
+<li><strong>Triar un color spot</strong> de la llista disponible.</li>
+<li><strong>Extreure els colors spot dels PDF carregats</strong> al projecte: el programa els detecta i els posa al teu abast perquè el text faci servir exactament aquest mateix color de marca.</li>
+<li>Ajustar el <strong>percentatge de tinta (0-100%)</strong> de cada tinta plana, de manera que puguis fer servir versions més clares del mateix color sense crear-ne una de nova.</li>
+</ul>
+<p>Important per a impremta: si el resultat s'imprimirà en quatricromia, defineix els colors en <strong>CMYK</strong>. Tingues en compte que el color que veus a pantalla <strong>no és el real d'impressió</strong>: el monitor mostra una aproximació gestionada pel <strong>perfil de color del sistema/monitor</strong> i la seva calibració (per això depèn de com estigui ajustada la teva pantalla i de la llum). A més, en quatricromia el color final <strong>no és exacte ni universal</strong>: el mateix valor CMYK depèn del <strong>perfil de color (ICC)</strong> que faci servir la impremta en la sortida per traduir-lo a tinta real. Per això pot veure's diferent entre pantalles, impremtes o perfils. Si necessites un color exacte i reproduïble, defineix-lo com a <strong>tinta plana</strong> (Pantone), que s'imprimeix amb la seva tinta premesclada a la seva pròpia planxa i és independent del perfil i de la pantalla.</p>
+<h2>Col·locació</h2>
+<p>Com la resta d'elements, el numerador s'<strong>arrossega</strong> a la posició desitjada de la pàgina. Pots <strong>girar-lo</strong>, <strong>alinear-lo</strong> i ajustar la seva mida. El número es recalcula sol segons la peça on quedi.</p>
+<h2>Diferència amb el text variable</h2>
+<p>El numerador imprimeix un <strong>número que avança sol</strong> (inici, fi, increment i màscara). El text variable mostra un <strong>text fix o des d'una columna d'Excel</strong>, sense seqüència automàtica. Si només necessites una numeració en sèrie, el numerador és el teu element; si necessites posar un valor diferent per peça sense numerar, fes servir el text variable.</p></body></html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guia de Codis de Barres — ITF-14</h1>
+<hr />
+<h2>Què és i per a què serveix</h2>
+<p>El <strong>ITF-14</strong> és un codi de barres pensat per a <strong>caixes, palets i embalatges de<br />
+transport</strong> (no per al producte al lineal). És el "codi gran de la logística":<br />
+s'imprimeix directament sobre el cartró i s'usa per identificar la <strong>unitat<br />
+d'enviament</strong> (una caixa que conté diverses unitats). Solen llegir-lo escàners de<br />
+magatzem.</p>
+<p>Es basa en la simbologia <em>Interleaved 2 of 5</em>, però amb una mida i un format fixos<br />
+pensats per al transport.</p>
+<h2>Què guarda el codi</h2>
+<p><strong>GTIN-14</strong> (14 dígits) normalment, o <strong>GTIN-13</strong> (13 dígits) que el programa<br />
+converteix. Només <strong>números</strong>. L'últim dígit és el <strong>dígit de control</strong>.</p>
+<ul>
+<li><strong>GTIN-14</strong>: exactament 14 dígits. El <strong>primer dígit</strong> és l'<em>indicador</em> (0 a 8)<br />
+  que sol distingir nivells de la caixa (p. ex. <code>1</code> = caixa, <code>2</code> = palet…).</li>
+<li><strong>GTIN-13</strong>: exactament 13 dígits. Si el tries, el programa li <strong>afegeix un 0 a<br />
+  l'inici</strong> i recalcula el dígit de control per convertir-lo en GTIN-14.</li>
+</ul>
+<blockquote>
+<p>El diàleg et deixa triar entre GTIN-14 i GTIN-13 segons la dada que tinguis.</p>
+</blockquote>
+<h2>Tipus d'impressora</h2>
+<p>L'ITF-14 imprimeix el seu text segons el tipus d'impressió que hagis triat (<strong>Flexo, Tèrmica o<br />
+Làser</strong>). Això ajusta automàticament les <strong>dimensions mínimes</strong> del codi (l'alçada i<br />
+el gruix de la vora, la "barra de suport" que l'envolta) perquè es pugui llegir segons<br />
+el mètode d'impressió.</p>
+<ul>
+<li><strong>Flexo</strong> (impressió sobre cartró): necessita el codi més gran i una vora més<br />
+  gruixuda.</li>
+<li><strong>Tèrmica / Làser</strong>: admeten un codi més petit i una vora més fina.</li>
+</ul>
+<p>Només has de triar com imprimiràs; el programa ja proposa els mínims<br />
+correctes per a aquest mètode.</p>
+<h2>El text llegible</h2>
+<p>Sota el codi es mostra el número <strong>formatat en blocs</strong> a l'estil logístic,<br />
+p. ex. <code>1 08 1234 567008 8</code> (agrupat tal com mana l'estàndard). Pots col·locar-lo<br />
+<strong>a sota o a sobre</strong> del codi, i ajustar la seva mida amb la casella <strong>Cos</strong>.</p>
+<p>Aquest text es dibuixa amb la font del codi (OCR per defecte), sense necessitat de<br />
+triar lletra.</p>
+<h2>Valor de mostra i columna Excel</h2>
+<p>Per defecte mostra un valor d'exemple. També pots fer servir una <strong>columna<br />
+d'Excel</strong>: en seleccionar-la es validen <strong>totes les files</strong> i, si alguna és <strong>buida</strong>,<br />
+<strong>no té els dígits correctes</strong> o <strong>el dígit de control falla</strong> (segons si és GTIN-14<br />
+o GTIN-13), apareix al visor del diàleg indicant quina fila té el problema.</p>
+<h2>L'origen de les dades</h2>
+<p>Com en totes les simbologies, el valor del codi pot sortir de tres llocs:</p>
+<table>
+<thead>
+<tr>
+<th>Origen</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Text fix</strong></td>
+<td>Escrius el valor a mà al perfil</td>
+</tr>
+<tr>
+<td><strong>Columna de dades externes</strong></td>
+<td>El valor ve d'una columna d'Excel/CSV, fila a fila</td>
+</tr>
+<tr>
+<td><strong>Numeració interna</strong></td>
+<td>El valor es genera amb una màscara (p. ex. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Per a les 3 s'apliquen les mateixes regles del codi (mida, tipus d'impressora, etc.).</p>
+<h2>Camps del diàleg</h2>
+<table>
+<thead>
+<tr>
+<th>Camp</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Amplada</strong></td>
+<td>Mida horitzontal del codi</td>
+</tr>
+<tr>
+<td><strong>Alçada</strong></td>
+<td>Alçada del codi</td>
+</tr>
+<tr>
+<td><strong>Cos</strong></td>
+<td>Mida de lletra del text llegible. <strong>0 = sense text</strong></td>
+</tr>
+<tr>
+<td><strong>Posició</strong></td>
+<td>Lloc del text: <strong>a sota</strong> o <strong>a sobre</strong> del codi</td>
+</tr>
+<tr>
+<td><strong>Distància</strong></td>
+<td>Espai entre el codi i el text</td>
+</tr>
+<tr>
+<td><strong>Tipus</strong></td>
+<td>GTIN-14 (14 dígits) o GTIN-13 (13 dígits)</td>
+</tr>
+<tr>
+<td><strong>Impressora</strong></td>
+<td>Flexo / Tèrmica / Làser (ajusta els mínims)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Per amagar el text llegible, posa Cos a 0</strong>: el codi es queda sol,<br />
+sense text al voltant.</p>
+</blockquote>
+<h2>Errors típics</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solució</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ha de tenir 14 dígits</td>
+<td>El GTIN-14 té una altra longitud</td>
+<td>Comprova la xifra (14 dígits)</td>
+</tr>
+<tr>
+<td>Ha de tenir 13 dígits</td>
+<td>El GTIN-13 té una altra longitud</td>
+<td>Comprova la xifra (13 dígits)</td>
+</tr>
+<tr>
+<td>El dígit de control no coincideix</td>
+<td>Última xifra mal calculada</td>
+<td>Recalcula el dígit de control</td>
+</tr>
+<tr>
+<td>Dada buida a la columna</td>
+<td>Alguna fila no té valor</td>
+<td>Omple la fila o treu aquesta fila de la columna</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

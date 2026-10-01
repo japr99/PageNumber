@@ -1,0 +1,88 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guide — Numberers (Numbers)</h1>
+<h2>What is it and what is it used for?</h2>
+<p>A numberer is an element of the layout that prints a number that <strong>automatically increases from one piece to the next</strong> (serial numbering). It is used to number tickets, stubs, receipts, entry passes, or any printed item that needs a sequence of numbers.</p>
+<p>You place a numberer on the page and the program assigns each piece its corresponding number based on its position and the print run, without you having to type them in by hand.</p>
+<h2>How is the number calculated?</h2>
+<p>The sequence is <strong>global</strong> (applies to the entire print run and affects both sides):</p>
+<ul>
+<li><strong>Starting number</strong>: the number the series begins with.</li>
+<li><strong>Ending number</strong>: the number the series ends with.</li>
+<li><strong>Increment</strong>: how much each piece increases by (usually by 1).</li>
+<li><strong>Reverse</strong>: whether the series runs in reverse order (decreasing instead of increasing).</li>
+<li><strong>Copies</strong>: how the numbers are distributed among the copies of each piece.</li>
+</ul>
+<p>The program calculates the number of each piece based on the page it is on, so the sequence is continuous and correct throughout the print.</p>
+<h2>The mask</h2>
+<p>The mask defines the <strong>format</strong> of the number using the <code>0</code> character. Each <code>0</code> reserves a position for a digit, and short numbers are <strong>zero-padded</strong> on the left.</p>
+<table>
+<thead>
+<tr>
+<th>Mask</th>
+<th>Example (number 5)</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0000</code></td>
+<td>5</td>
+<td><code>0005</code></td>
+</tr>
+<tr>
+<td><code>000</code></td>
+<td>5</td>
+<td><code>005</code></td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td>5</td>
+<td><code>5</code></td>
+</tr>
+</tbody>
+</table>
+<p>You can also combine the mask with letters or other characters (<code>AB000</code> → <code>AB005</code>).</p>
+<h2>Profiles</h2>
+<p>Each numberer uses a <strong>text profile</strong> that stores how the number looks:</p>
+<ul>
+<li><strong>Font</strong> and <strong>style</strong> (regular, bold, italic…).</li>
+<li><strong>Size</strong> of the text.</li>
+<li><strong>Colors</strong>: the number, prefix, and suffix colors can each be set independently.</li>
+<li><strong>Prefix and suffix</strong>: text printed before and after the number (e.g. prefix <code>Nº</code>, suffix <code>/24</code>).</li>
+<li><strong>Thousands separator</strong>: enable it so large numbers are displayed with dots (or the local separator).</li>
+<li><strong>Letter spacing</strong>: extra space between characters.</li>
+</ul>
+<p>When you create a numberer it uses the <code>&lt;Default&gt;</code> profile; you can create as many profiles as you need (each with its own font, color, and mask) and choose which one each numberer applies.</p>
+<h2>Print colors</h2>
+<p>Each color (number, prefix, and suffix) can be defined in the <strong>color space</strong> you prefer based on the print destination:</p>
+<ul>
+<li><strong>RGB</strong> (red, green, blue): intended for <strong>screen</strong> (digital view, preview). If you are only going to print in CMYK, it is better to use CMYK.</li>
+<li><strong>CMYK</strong> (cyan, magenta, yellow, black): the standard for <strong>digital and offset CMYK printing</strong>. This is the usual mode for commercial jobs.</li>
+<li><strong>Spot ink (SPOT / Pantone)</strong>: a <strong>specific premixed color</strong> printed on its <strong>own plate</strong> with its own ink. This is the correct mode for <strong>corporate or brand colors</strong>, because it reproduces the exact logo color without depending on the mixing of the four process colors.</li>
+</ul>
+<p>For spot inks you can:</p>
+<ul>
+<li><strong>Choose a spot color</strong> from the available list.</li>
+<li><strong>Extract spot colors from the loaded PDFs</strong> in the project: the program detects them and makes them available so the text uses that exact brand color.</li>
+<li>Adjust the <strong>ink percentage (0-100%)</strong> of each spot ink, so you can use lighter versions of the same color without creating a new one.</li>
+</ul>
+<p>Important for printing: if the result is going to be printed in CMYK, define the colors in <strong>CMYK</strong>. Keep in mind that the color you see on screen <strong>is not the actual print color</strong>: the monitor shows an approximation managed by the <strong>system/monitor color profile</strong> and its calibration (which is why it depends on how your screen is set up and the lighting). Also, in CMYK the final color <strong>is not exact or universal</strong>: the same CMYK value depends on the <strong>color profile (ICC)</strong> that the print shop uses at output to translate it to real ink. That is why it may look different across screens, print shops, or profiles. If you need an exact and reproducible color, define it as a <strong>spot ink</strong> (Pantone), which is printed with its premixed ink on its own plate and is independent of the profile and the screen.</p>
+<h2>Placement</h2>
+<p>Like other elements, the numberer is <strong>dragged</strong> to the desired position on the page. You can <strong>rotate</strong> it, <strong>align</strong> it, and adjust its size. The number is recalculated automatically based on the piece where it lands.</p>
+<h2>Difference from variable text</h2>
+<p>The numberer prints a <strong>number that advances on its own</strong> (start, end, increment, and mask). Variable text displays <strong>fixed text or text from an Excel column</strong>, without an automatic sequence. If you only need serial numbering, the numberer is your element; if you need a different value per piece without numbering, use variable text.</p></body></html>

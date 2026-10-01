@@ -1,0 +1,165 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guía de Códigos de Barras — UPC-A / UPC-E</h1>
+<hr />
+<h2>Qué es y para qué sirve</h2>
+<p>El <strong>UPC</strong> es el código de barras de producto más usado en <strong>Estados Unidos y<br />
+Canadá</strong> (el "primo americano" del EAN). Por eso lo verás en productos de Norteamérica<br />
+o en etiquetas pensadas para ese mercado. Es un código numérico de barras verticales.</p>
+<table>
+<thead>
+<tr>
+<th>Variante</th>
+<th>Dígitos</th>
+<th>Para qué se usa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>UPC-A</strong></td>
+<td>12</td>
+<td>Código estándar de producto en EEUU/Canadá</td>
+</tr>
+<tr>
+<td><strong>UPC-E</strong></td>
+<td>6</td>
+<td>Versión reducida para productos pequeños</td>
+</tr>
+</tbody>
+</table>
+<p>El <strong>UPC-E</strong> es una forma compacta del UPC-A: guarda la misma información con menos<br />
+dígitos cuando el código lo permite, ideal para etiquetas con poco espacio.</p>
+<h2>Qué guarda el código</h2>
+<p>Solo <strong>números</strong> (sin letras ni símbolos).</p>
+<ul>
+<li><strong>UPC-A</strong>: exactamente 12 dígitos. El último es el <strong>dígito de control</strong>, que se<br />
+  comprueba para que el lector sepa si el código se ha leído bien.</li>
+<li><strong>UPC-E</strong>: exactamente 6 dígitos. El <strong>primer dígito debe ser 0 o 1</strong> (identifica la<br />
+  familia de números del sistema). El resto son los datos.</li>
+</ul>
+<p>Como es un código de producto, funciona igual que el EAN: <strong>los números van dentro del<br />
+código</strong>, entre las barras.</p>
+<h2>Valor de muestra y columna Excel</h2>
+<p>Por defecto muestra un valor de ejemplo. También puedes usar una <strong>columna de<br />
+Excel</strong>: al seleccionarla se validan <strong>todas las filas</strong> y, si alguna está <strong>vacía</strong>,<br />
+<strong>no tiene los dígitos correctos</strong> o <strong>el dígito de control falla</strong>, aparece en el<br />
+visor del diálogo indicando qué fila tiene el problema.</p>
+<h2>El origen de los datos</h2>
+<p>Como en todas las simbologías, el valor del código puede salir de tres sitios:</p>
+<table>
+<thead>
+<tr>
+<th>Origen</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Texto fijo</strong></td>
+<td>Escribes el valor a mano en el perfil</td>
+</tr>
+<tr>
+<td><strong>Columna de datos externos</strong></td>
+<td>El valor viene de una columna de Excel/CSV, fila a fila</td>
+</tr>
+<tr>
+<td><strong>Numeración interna</strong></td>
+<td>El valor se genera con una máscara (p. ej. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Para las 3 se aplican las mismas reglas del código (tamaño, etc.).</p>
+<h2>Los dígitos del código</h2>
+<p>En el UPC los <strong>números van dentro del código</strong>, entre las barras, como parte del<br />
+propio símbolo (no es un bloque de texto aparte que puedas mover). Ajustas su tamaño<br />
+con la casilla <strong>Cuerpo</strong>.</p>
+<h2>Campos del diálogo</h2>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ancho</strong></td>
+<td>Tamaño horizontal del código</td>
+</tr>
+<tr>
+<td><strong>Alto</strong></td>
+<td>Altura del código</td>
+</tr>
+<tr>
+<td><strong>Fuente</strong></td>
+<td>Tipo de letra de los dígitos del código</td>
+</tr>
+<tr>
+<td><strong>Cuerpo</strong></td>
+<td>Tamaño de letra de los dígitos. <strong>0 = sin texto</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A diferencia del QR, el PDF417 o el Code 128, en el UPC <strong>no</strong> se puede mover el<br />
+texto alrededor del código: los dígitos van fijos dentro de las barras.</p>
+<h2>El tipo de letra de los dígitos (Fuente)</h2>
+<p>Los dígitos del código se dibujan con la letra que elijas en el campo <strong>Fuente</strong>.</p>
+<p>Las letras <strong>OCR</strong> (OCR-A, OCR-B y sus variantes) son las clásicas de los códigos de<br />
+barras: cada cifra está diseñada para que el lector la distinga sin errores. <strong>No<br />
+incluyen caracteres especiales</strong> (la <strong>ñ</strong>, acentos como á/é, ni símbolos); es una<br />
+tipografía propia del código de barras. Como el UPC es <strong>solo números</strong>, la OCR es la<br />
+recomendada. Si tu texto necesitara caracteres especiales, usarías Helvetica (en Mac)<br />
+o Arial (en Windows), que son las fuentes normales y sí los tienen — aunque en el UPC<br />
+solo entran dígitos.</p>
+<h2>Errores típicos</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Debe tener 12 dígitos</td>
+<td>El UPC-A tiene otra longitud</td>
+<td>Comprueba la cifra (12 dígitos)</td>
+</tr>
+<tr>
+<td>Debe tener 6 dígitos</td>
+<td>El UPC-E tiene otra longitud</td>
+<td>Comprueba la cifra (6 dígitos)</td>
+</tr>
+<tr>
+<td>El primer dígito debe ser 0 o 1</td>
+<td>El UPC-E empieza por otra cifra</td>
+<td>Cambia el primer dígito a 0 o 1</td>
+</tr>
+<tr>
+<td>El dígito de control no coincide</td>
+<td>Última cifra mal calculada</td>
+<td>Recalcula el dígito de control</td>
+</tr>
+<tr>
+<td>Dato vacío en columna</td>
+<td>Alguna fila no tiene valor</td>
+<td>Rellena la fila o quita esa fila de la columna</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

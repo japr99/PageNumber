@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Builds / empaquetado
+build/
+dist/
+dist-flet-pack/
+*.spec
+*.pkgproj
+*.app/
+
+# Generados en runtime
+numeracion.pdf
+PageNumber/numeracion.pdf
+*.log
+
+# Sistema
+.DS_Store
+.idea/
+.vscode/

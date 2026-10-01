@@ -1,0 +1,150 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guia de Codis de Barres — Code 39</h1>
+<hr />
+<h2>Què és i per a què serveix</h2>
+<p>El <strong>Code 39</strong> és un codi de barres unidimensional (només barres verticals en una<br />
+línia), molt usat des de fa dècades en <strong>etiquetes d'inventari, logística,<br />
+identificació d'arxius i gestió d'actius</strong>. És senzill, fiable i compatible<br />
+amb gairebé qualsevol lector.</p>
+<p>El nom ve del fet que cada caràcter es representa amb un patró de <strong>9 elements</strong><br />
+(3 amples i 6 estrets), d'aquí el "39".</p>
+<h2>Què guarda el codi</h2>
+<p>Pot guardar <strong>majúscules, números i alguns símbols</strong> (<code>- . / + % espai</code>).</p>
+<p>A més, si escrius lletres <strong>minúscules o altres símbols</strong> (per exemple caràcters<br />
+especials), el programa els converteix automàticament a la seva versió compatible fent<br />
+servir una codificació especial (Code 39 <em>Extended</em>): visualment no canvia el que escrius,<br />
+només s'ajusta internament perquè el lector ho entengui.</p>
+<p>Regles a tenir en compte:</p>
+<ul>
+<li>El màxim és de <strong>41 caràcters</strong> de dades.</li>
+<li>Els asteriscs <code>*</code> s'usen com a inici/fi del codi, no has d'escriure'ls com a<br />
+  dada.</li>
+</ul>
+<h2>Format i capacitats</h2>
+<ul>
+<li><strong>Amplada</strong> i <strong>Alçada</strong> es fixen a mà. L'amplada mai no pot quedar per sota d'un<br />
+  mínim perquè el codi es pugui llegir.</li>
+<li>El text llegible pot anar <strong>a sota o a sobre</strong> del codi (no als costats).</li>
+</ul>
+<h2>Valor de mostra i columna Excel</h2>
+<p>Per defecte mostra un valor d'exemple. També pots fer servir una <strong>columna<br />
+d'Excel</strong>: en seleccionar-la es validen <strong>totes les files</strong> i, si alguna és <strong>buida</strong> o<br />
+<strong>és massa llarga</strong>, apareix al visor del diàleg indicant quina fila falla.</p>
+<h2>L'origen de les dades</h2>
+<p>Com en totes les simbologies, el valor del codi pot sortir de tres llocs:</p>
+<table>
+<thead>
+<tr>
+<th>Origen</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Text fix</strong></td>
+<td>Escrius el valor a mà al perfil</td>
+</tr>
+<tr>
+<td><strong>Columna de dades externes</strong></td>
+<td>El valor ve d'una columna d'Excel/CSV, fila a fila</td>
+</tr>
+<tr>
+<td><strong>Numeració interna</strong></td>
+<td>El valor es genera amb una màscara (p. ex. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Per a les 3 s'apliquen les mateixes regles del codi (mida, posició del text, etc.).</p>
+<h2>Camps del diàleg</h2>
+<table>
+<thead>
+<tr>
+<th>Camp</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Amplada</strong></td>
+<td>Mida horitzontal del codi</td>
+</tr>
+<tr>
+<td><strong>Alçada</strong></td>
+<td>Alçada del codi</td>
+</tr>
+<tr>
+<td><strong>Font</strong></td>
+<td>Tipus de lletra del text llegible</td>
+</tr>
+<tr>
+<td><strong>Cos</strong></td>
+<td>Mida de lletra del text. <strong>0 = sense text</strong></td>
+</tr>
+<tr>
+<td><strong>Posició</strong></td>
+<td>Lloc del text: <strong>a sota</strong> o <strong>a sobre</strong> del codi</td>
+</tr>
+<tr>
+<td><strong>Distància</strong></td>
+<td>Espai entre el codi i el text</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Per amagar el text llegible, posa Cos a 0</strong>: el codi es queda sol,<br />
+sense text al voltant.</p>
+</blockquote>
+<p>A diferència del QR o el PDF417, en el Code 39 el text <strong>no</strong> admet les 9<br />
+posicions d'alineació ni col·locar-se als costats: només va a sota o a sobre.</p>
+<h2>El tipus de lletra del text (Font)</h2>
+<p>El text llegible que acompanya el codi es dibuixa amb la lletra que triïs al<br />
+camp <strong>Font</strong>.</p>
+<p>Les lletres <strong>OCR</strong> (OCR-A, OCR-B i les seves variants) són les clàssiques dels codis de<br />
+barres: cada xifra està dissenyada perquè el lector la distingeixi sense errors. <strong>No<br />
+inclouen caràcters especials</strong> (la <strong>ñ</strong>, accents com ara á/é, ni símbols); és una<br />
+tipografia pròpia del codi de barres. Si el teu text necessita aquests caràcters, tria<br />
+<strong>Helvetica</strong> (a Mac) o <strong>Arial</strong> (a Windows), que són les fonts normals i sí<br />
+que els tenen.</p>
+<h2>Errors típics</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solució</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Text massa llarg</td>
+<td>Més de 41 caràcters</td>
+<td>Escurça el text o reparteix en diversos codis</td>
+</tr>
+<tr>
+<td>Caràcter no compatible</td>
+<td>Algun símbol que no es pot convertir</td>
+<td>Fes servir caràcters compatibles (majúscules, números, <code>- . / + %</code>)</td>
+</tr>
+<tr>
+<td>Dada buida a la columna</td>
+<td>Alguna fila no té valor</td>
+<td>Omple la fila o treu aquesta fila de la columna</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

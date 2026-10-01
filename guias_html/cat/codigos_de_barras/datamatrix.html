@@ -1,0 +1,728 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guia de Codis de Barres — DataMatrix</h1>
+<hr />
+<h2>1. DataMatrix (família de simbologies)</h2>
+<p>L'DataMatrix és un codi bidimensional que pot treballar de <strong>tres maneres</strong><br />
+diferents, segons l'opció que triïs al selector:</p>
+<table>
+<thead>
+<tr>
+<th>Opció del selector</th>
+<th>Què guarda el codi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DataMatrix personalitzat</strong></td>
+<td>Qualsevol text lliure (dades pròpies, diverses línies, una URL…)</td>
+</tr>
+<tr>
+<td><strong>GS1 DataMatrix</strong></td>
+<td>Dades GS1 en format <code>(AI)valor</code>: <code>(01)...(17)...</code></td>
+</tr>
+<tr>
+<td><strong>DataMatrix GS1 Digital Link</strong></td>
+<td>Les mateixes dades GS1, però dins d'una <strong>adreça web (URL)</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Les tres comparteixen la <strong>configuració física</strong> del codi (mida, format i<br />
+text llegible sota el símbol), que s'explica al final d'aquesta secció. El que<br />
+canvia entre elles és <strong>què escrius a les dades</strong>. A continuació es detalla<br />
+cadascuna.</p>
+<hr />
+<h3>1.1 DataMatrix personalitzat</h3>
+<p>És l'DataMatrix "normal": guarda <strong>el que vulguis</strong>, sense validar cap<br />
+estàndard. Només comprova que no sigui buit.</p>
+<ul>
+<li><strong>Una sola línia:</strong> escriu el text directament.</li>
+<li><strong>Diverses línies:</strong> fes servir el caràcter separador (<code>\|</code> per defecte) entre<br />
+  cada text; cada bloc separat serà una línia diferent.</li>
+</ul>
+<p>Exemples:</p>
+<pre><code>Cliente: 1001 | Nombre: Maria Garcia Lopez | DNI: 12345678Z
+ABC12345
+https://ejemplo.com/producto
+</code></pre>
+<p>El primer genera 3 línies llegibles (una per cada <code>|</code>). Els altres generen una<br />
+sola. Resulta útil per posar dades pròpies del teu programari sense seguir GS1.</p>
+<h4>Adaptar el codi al lector (inici i fi de camp)</h4>
+<p>Perquè l'app lectora distingeixi cada camp, defines dos controls:</p>
+<ul>
+<li><strong>Obertura</strong>: caràcter que marca l'<em>inici</em> de cada camp.</li>
+<li><strong>Tancament</strong>: caràcter que marca el <em>fi</em> de cada camp.</li>
+</ul>
+<p>El programa parteix la dada en camps fent servir aquests caràcters (treu l'obertura<br />
+inicial, divideix per <code>tancament+obertura</code>, neteja el tancament de l'últim). Cada camp<br />
+apareix com una línia llegible sota el codi i així l'app lectora identifica<br />
+on acaba un i comença el següent.</p>
+<ul>
+<li><strong>Valor intern</strong> — el botó "Edita el text" obre una finestra: escrius la<br />
+  dada, defines obertura i tancament i veus <strong>en directe</strong> com queda cada camp.</li>
+<li><strong>Dada externa</strong> — en triar la columna, el programa intenta detectar el<br />
+  separador automàticament (prova diversos caràcters fins a trobar el que<br />
+  divideix les files en el mateix nombre de camps). És només una <strong>proposta i no<br />
+  és del tot fiable</strong> —si el caràcter també apareix dins de les dades<br />
+  (p. ex. comes en una adreça) o les files no tenen sempre el mateix nombre<br />
+  de camps, pots encertar el candidat equivocat o quedar-te amb <code>|</code> per<br />
+  defecte—; revisa sempre que Obertura i Tancament coincideixin amb el separador real.</li>
+</ul>
+<p>Als fitxers de dades d'exemple tens columnes amb separadors diferents per<br />
+provar:</p>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Separador</th>
+<th>Obertura / Tancament al perfil</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>datamatrix_pipe</code></td>
+<td><code>\|</code></td>
+<td>buida / <code>\|</code></td>
+</tr>
+<tr>
+<td><code>datamatrix_semicolon</code></td>
+<td><code>;</code></td>
+<td>buida / <code>;</code></td>
+</tr>
+<tr>
+<td><code>datamatrix_chevron</code></td>
+<td><code>&lt;&lt;</code> <code>&gt;&gt;</code></td>
+<td><code>&lt;&lt;</code> / <code>&gt;&gt;</code></td>
+</tr>
+<tr>
+<td><code>datamatrix_brace</code></td>
+<td><code>{</code> <code>}</code></td>
+<td><code>{</code> / <code>}</code></td>
+</tr>
+</tbody>
+</table>
+<p>Exemple amb obertura <code>&lt;&lt;</code> i tancament <code>&gt;&gt;</code>:</p>
+<pre><code>&lt;&lt;Cliente: 1001&gt;&gt;&lt;&lt;Nombre: Maria Garcia Lopez&gt;&gt;&lt;&lt;DNI: 12345678Z&gt;&gt;
+</code></pre>
+<p>→ tres camps: "Cliente: 1001", "Nombre: Maria Garcia Lopez", "DNI: 12345678Z".</p>
+<p>Amb Obertura buida i Tancament <code>|</code> és el comportament clàssic:<br />
+<code>Cliente: 1001 | Nombre: ... | DNI: ...</code>.</p>
+<blockquote>
+<p>Amb tots dos separadors buits, la dada és un únic camp.</p>
+</blockquote>
+<p>Aquestes línies de text no han de quedar sempre sota el codi: pots<br />
+<strong>posicionar-les</strong> a qualsevol lloc al seu voltant (<strong>a sota, a sobre,<br />
+a l'esquerra o a la dreta</strong>) i <strong>alinear-les</strong> a les 9 posicions possibles<br />
+(superior / mig / inferior × esquerra / centre / dreta) amb els camps<br />
+<strong>Posició HRI</strong> i <strong>Alineació HRI</strong> del perfil.</p>
+<hr />
+<h3>1.2 GS1 DataMatrix</h3>
+<p>Variante per a identificació de productes amb l'estàndard GS1. Les dades<br />
+s'organitzen per <em>Application Identifiers</em> (AI) — cada AI és un número que<br />
+identifica què significa el valor que el segueix.</p>
+<h4>Format d'entrada</h4>
+<p>Cada bloc s'escriu com a <code>(AI)valor</code> sense espais entre blocs:</p>
+<pre><code>(01)09506000117843(17)250124(10)POIG8F(21)1CBFNO6B9M
+</code></pre>
+<p>Els parèntesis són només per a lectura humana. En generar el codi s'eliminen i<br />
+s'injecta un caràcter separador invisible entre camps variables.</p>
+<h4>Exemples habituals</h4>
+<table>
+<thead>
+<tr>
+<th>Ús</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Producte + lot + data</td>
+<td><code>(01)09506000117843(17)250124(10)LOTE001</code></td>
+</tr>
+<tr>
+<td>Producte + sèrie</td>
+<td><code>(01)09506000117843(21)SERIE12345</code></td>
+</tr>
+<tr>
+<td>Producte + lot + sèrie</td>
+<td><code>(01)09506000117843(10)LOTE001(21)SERIE12345</code></td>
+</tr>
+</tbody>
+</table>
+<h4>AIs compatibles (GS1)</h4>
+<table>
+<thead>
+<tr>
+<th>AI</th>
+<th>Significat</th>
+<th>Format</th>
+<th>Tipus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00</td>
+<td>SSCC (codi de caixa)</td>
+<td>18 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td><strong>01</strong></td>
+<td><strong>GTIN (codi de producte)</strong></td>
+<td><strong>14 dígits</strong></td>
+<td><strong>Fix</strong></td>
+</tr>
+<tr>
+<td>02</td>
+<td>GTIN del contingut</td>
+<td>14 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Lot / Batch</td>
+<td>1-20 caràcters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Data de fabricació (AAMMDD)</td>
+<td>6 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Data de pagament (AAMMDD)</td>
+<td>6 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Data d'envasament (AAMMDD)</td>
+<td>6 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Data de consum preferent (AAMMDD)</td>
+<td>6 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Data de venda recomanada (AAMMDD)</td>
+<td>6 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td><strong>17</strong></td>
+<td><strong>Data de caducitat (AAMMDD)</strong></td>
+<td><strong>6 dígits</strong></td>
+<td><strong>Fix</strong></td>
+</tr>
+<tr>
+<td>20</td>
+<td>Variant de producte</td>
+<td>2 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td><strong>21</strong></td>
+<td><strong>Número de sèrie</strong></td>
+<td><strong>1-20 caràcters</strong></td>
+<td><strong>Variable</strong></td>
+</tr>
+<tr>
+<td>22</td>
+<td>Versió de producte</td>
+<td>1-20 caràcters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Quantitat d'unitats</td>
+<td>1-8 dígits</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>240</td>
+<td>Codi addicional fabricant</td>
+<td>1-30 caràcters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>241</td>
+<td>Codi de component</td>
+<td>1-30 caràcters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>242</td>
+<td>ID aliment mascotes</td>
+<td>1-6 dígits</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>250</td>
+<td>Núm. de sèrie d'enviament</td>
+<td>1-30 caràcters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>251</td>
+<td>Enllaç de la font primària</td>
+<td>1-30 caràcters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>253</td>
+<td>GDTI (document)</td>
+<td>13 dígits + 17 car.</td>
+<td>Compost</td>
+</tr>
+<tr>
+<td>254</td>
+<td>GLN d'origen</td>
+<td>13 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>255</td>
+<td>GCN (cupó)</td>
+<td>13 dígits + 12 díg.</td>
+<td>Compost</td>
+</tr>
+<tr>
+<td>310x</td>
+<td>Pes net kg</td>
+<td>6 dígits (x=decimal)</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>311x</td>
+<td>Llarg / Longitud m</td>
+<td>6 dígits (x=decimal)</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>312x</td>
+<td>Amplada m</td>
+<td>6 dígits (x=decimal)</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>313x</td>
+<td>Alt / Gruix m</td>
+<td>6 dígits (x=decimal)</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>314x</td>
+<td>Àrea / Superfície m²</td>
+<td>6 dígits (x=decimal)</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>315x</td>
+<td>Volum net l</td>
+<td>6 dígits (x=decimal)</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>316x</td>
+<td>Volum net m³</td>
+<td>6 dígits (x=decimal)</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>320x</td>
+<td>Pes net lb</td>
+<td>6 dígits (x=decimal)</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>330x</td>
+<td>Pes brut kg</td>
+<td>6 dígits (x=decimal)</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>340x</td>
+<td>Superfície yd²</td>
+<td>6 dígits (x=decimal)</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Núm. d'ordre de compra</td>
+<td>1-30 caràcters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>401</td>
+<td>GINC (identificació d'enviament)</td>
+<td>1-30 caràcters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>402</td>
+<td>GSIN (consignació)</td>
+<td>17 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Codi de ruta</td>
+<td>1-30 caràcters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>410</td>
+<td>GLN del comprador</td>
+<td>13 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>411</td>
+<td>GLN facturació</td>
+<td>13 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>412</td>
+<td>GLN distribuïdor</td>
+<td>13 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>413</td>
+<td>GLN destinatari final</td>
+<td>13 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>414</td>
+<td>GLN ubicació física</td>
+<td>13 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>415</td>
+<td>GLN del proveïdor</td>
+<td>13 dígits</td>
+<td>Fix</td>
+</tr>
+<tr>
+<td>420</td>
+<td>Codi postal nacional</td>
+<td>1-20 caràcters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>421</td>
+<td>Codi postal internacional</td>
+<td>3 dígits + 9 car.</td>
+<td>Compost</td>
+</tr>
+<tr>
+<td>422</td>
+<td>País d'origen</td>
+<td>3 dígits (ISO)</td>
+<td>Fix</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Nota:</strong> els AI en <strong>negreta</strong> són els més usats. Els de tipus "Fix" es<br />
+validen automàticament (longitud exacta i només dígits). Si fas servir un de tipus<br />
+"Compost", la validació bàsica comprova que tingui valor però no valida cada<br />
+part.</p>
+</blockquote>
+<h4>Columna Excel</h4>
+<p>Cada cel·la ha de contenir el format complet amb parèntesis:</p>
+<pre><code>(01)09506000117843(17)250124(10)POIG8F(21)1CBFNO6B9M
+</code></pre>
+<p>En seleccionar la columna es validen <strong>totes les files</strong>. Si hi ha errors, apareixen<br />
+al visor del diàleg indicant quines files fallen i per què. Les dades GS1 no es<br />
+parteixen per separadors: fan servir la seva pròpia estructura, i per això es mostra<br />
+l'etiqueta "Dades GS1 detectades".</p>
+<h4>Errors típics</h4>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solució</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AI 01 ha de tenir 14 dígits (GTIN)</code></td>
+<td>El GTIN té 13 dígits</td>
+<td>Afegeix un 0 a l'inici</td>
+</tr>
+<tr>
+<td><code>AI 17 ha de tenir 6 dígits (YYMMDD)</code></td>
+<td>La data en té menys de 6</td>
+<td>Fes servir format AAMMDD (ex: 250124)</td>
+</tr>
+<tr>
+<td><code>AI 01 ha de ser numèric</code></td>
+<td>El GTIN conté lletres</td>
+<td>Revisa el valor, només dígits</td>
+</tr>
+<tr>
+<td><code>AI 10 sense valor</code></td>
+<td>El lot és buit</td>
+<td>Afegeix el número de lot</td>
+</tr>
+<tr>
+<td><code>Format GS1 HRI invàlid</code></td>
+<td>No es reconeix el format</td>
+<td>Fes servir <code>(AI)valor</code> sense espais entre blocs</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>1.3 DataMatrix GS1 Digital Link</h3>
+<blockquote>
+<p>Font d'aquesta explicació: estàndard GS1 Digital Link de GS1 Espanya<br />
+(<a href="https://www.gs1es.org/estandares-gs1-identificar/gs1-digital-link/">https://www.gs1es.org/estandares-gs1-identificar/gs1-digital-link/</a>).</p>
+</blockquote>
+<h4>Què és?</h4>
+<p><strong>GS1 Digital Link</strong> és l'estàndard de GS1 que <strong>insereix el sistema<br />
+d'identificació GS1 dins d'una adreça web (URL)</strong>. El codi de barres ja no<br />
+guarda només "el número de producte", sinó <strong>un enllaç</strong> que porta a la pàgina web<br />
+d'aquest producte.</p>
+<p>El gran avantatge és com es <strong>llegeix</strong>: avui dia, la majoria de la gent porta un mòbil<br />
+que no entén un GS1 clàssic, però <strong>qualsevol mòbil escaneja una URL amb la càmera</strong><br />
+i obre la web automàticament. Tot i que GS1 Digital Link es va popularitzar amb el QR,<br />
+també pot anar en un <strong>DataMatrix</strong>, que és precisament aquesta opció del selector.</p>
+<h4>Què aporta al teu client (i a tu)?</h4>
+<ul>
+<li><strong>Accés directe al contingut</strong>: el consumidor escaneja i veu ingredients,<br />
+  al·lèrgens, instruccions d'ús, receptes, productes relacionats o la botiga<br />
+  online de la marca.</li>
+<li><strong>Menys etiquetes</strong>: concentra en un sol codi tota la informació que avui<br />
+  obligaria a imprimir diverses etiquetes o diversos codis.</li>
+<li><strong>Trazabilitat</strong>: amb el lot, la data de caducitat o de consum preferent dins<br />
+  del codi es poden retirar del magatzem productes caducats, amb alertes<br />
+  alimentàries o falsificats.</li>
+<li><strong>Devolucions més fàcils</strong> per al distribuïdor i <strong>millor intercanvi de<br />
+  dades</strong> amb els socis comercials.</li>
+<li><strong>Implantació gradual</strong>: pots començar només amb el <strong>GTIN</strong> (el cas més<br />
+  senzill) i anar-hi afegint més "identificadors d'aplicació" segons ho necessitis.</li>
+<li><strong>Sostenibilitat i passaport digital de producte</strong>: permet enllaçar dades de<br />
+  petjada de carboni, reciclatge o reacondicionament (requisit que impulsa la<br />
+  Unió Europea).</li>
+</ul>
+<h4>Com es diferencia del GS1 DataMatrix de sempre?</h4>
+<p>Tots dos fan servir els <strong>mateixos identificadors (AI)</strong> i són <strong>funcionalment<br />
+equivalents</strong>: diuen el mateix sobre el producte. La diferència és només <strong>com<br />
+s'escriuen les dades</strong>:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>GS1 DataMatrix (element string)</th>
+<th>GS1 Digital Link (URL)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forma d'escriure</td>
+<td><code>(01)09506000117843(17)250124</code></td>
+<td><code>https://id.gs1.org/01/09506000117843/...</code></td>
+</tr>
+<tr>
+<td>Qui el llegeix</td>
+<td>Escàners industrials</td>
+<td>Mòbil amb càmera (obre la web)</td>
+</tr>
+<tr>
+<td>Utilitat</td>
+<td>Inventari i logística</td>
+<td>Connectar amb el consumidor i la web</td>
+</tr>
+</tbody>
+</table>
+<h4>Format d'entrada</h4>
+<p>Un GS1 Digital Link és una <strong>URL</strong> que inclou el domini de GS1 i, a<br />
+continuació, els identificadors (AI) separats per barres <code>/</code>. Els camps de<br />
+longitud variable (com el lot o el número de sèrie) també s'escriuen a<br />
+l'enllaç i, si cal, els camps de data van al final com a paràmetres <code>?</code>:</p>
+<pre><code>https://id.gs1.org/01/{GTIN}/10/{lot}?17={caducitat}&amp;21={sèrie}
+</code></pre>
+<p>Exemple real:</p>
+<pre><code>https://id.gs1.org/01/09506000117843/10/POIG8F?17=250124&amp;21=1CBFNO6B9M
+</code></pre>
+<h4>Exemples habituals</h4>
+<table>
+<thead>
+<tr>
+<th>Ús</th>
+<th>Exemple (URL GS1 Digital Link)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Producte + lot + sèrie</td>
+<td><code>https://id.gs1.org/01/09506000117843/10/LOTE001?21=SERIE12345</code></td>
+</tr>
+<tr>
+<td>Producte + lot + data</td>
+<td><code>https://id.gs1.org/01/09506000117843/10/LOTE001?17=250124</code></td>
+</tr>
+<tr>
+<td>Producte + sèrie + data</td>
+<td><code>https://id.gs1.org/01/09506000117843/10/LOTE001?17=250124&amp;21=SERIE12345</code></td>
+</tr>
+</tbody>
+</table>
+<h4>Regla important amb les dates</h4>
+<p>Els <strong>identificadors de longitud fixa amb data</strong> (com el <code>17</code> de caducitat, el<br />
+<code>15</code> de consum preferent…) poden anar a l'enllaç <strong>abans</strong> d'un camp<br />
+variable, però <strong>un cop apareix un camp variable (com el lot <code>10</code> o el de<br />
+sèrie <code>21</code>), les dates passen als paràmetres <code>?</code> del final</strong>. Aquesta regla la<br />
+imposa el mateix estàndard i el programa la <strong>valida automàticament</strong>.</p>
+<h4>Columna Excel</h4>
+<p>Pots fer servir una columna d'Excel amb una <strong>URL completa GS1 Digital Link</strong> per<br />
+cel·la. En seleccionar la columna es validen <strong>totes les files</strong>: cada valor<br />
+<strong>ha de ser una URL GS1 Digital Link vàlida</strong> (no val una adreça web qualsevol).</p>
+<ul>
+<li>Si necessites guardar una URL lliure sense validar, fes servir la variant<br />
+<strong>DataMatrix personalitzat</strong> en lloc d'aquesta.</li>
+</ul>
+<h4>Errors típics</h4>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solució</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>URI GS1 Digital Link invàlida: ...</code></td>
+<td>L'adreça no compleix l'estàndard</td>
+<td>Revisa que comenci per <code>https://id.gs1.org/01/...</code></td>
+</tr>
+<tr>
+<td><code>URI GS1 Digital Link invàlida</code></td>
+<td>Vas posar una URL normal sense GTIN 01</td>
+<td>Fes servir DataMatrix personalitzat o afegeix <code>01/{GTIN}</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Consell:</strong> si la dada és un enllaç llarg, recorda que, com a les altres dues<br />
+variants, el codi es fa <strong>més gran i més quadrat</strong> (vegeu "Mides del<br />
+codi" més avall). Amb URLs molt llargues només quedarà disponible el format<br />
+quadrat.</p>
+</blockquote>
+<h4>Camps del diàleg</h4>
+<p>Són <strong>els mateixos</strong> que la resta de la família DataMatrix (vegeu 1.4). En aquesta<br />
+variant no hi ha separadors de camp: el text llegible sota el codi mostra la<br />
+URL completa.</p>
+<hr />
+<h3>1.4 Comú a la família (configuració del codi)</h3>
+<h4>Camps del diàleg</h4>
+<table>
+<thead>
+<tr>
+<th>Camp</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Amplada</strong></td>
+<td>Mida horitzontal del codi en mm</td>
+</tr>
+<tr>
+<td><strong>Alçada</strong></td>
+<td>Les 3 mides GS1 disponibles — tria la que prefereixis<em>(si la dada és llarga, només n'hi haurà 1: la quadrada)</em></td>
+</tr>
+<tr>
+<td><strong>Format</strong></td>
+<td>Quadrat (automàtic) o rectangular</td>
+</tr>
+<tr>
+<td><strong>Font HRI</strong></td>
+<td>Tipus de lletra del text llegible sota el codi o sobre el</td>
+</tr>
+<tr>
+<td><strong>Cos HRI</strong></td>
+<td>Mida de lletra del text. 0 = sense text</td>
+</tr>
+<tr>
+<td><strong>Distància HRI</strong></td>
+<td>Espai entre el codi i el text</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Per amagar el text llegible, posa Cos a 0</strong>: el codi es queda sol,<br />
+sense text al voltant.</p>
+</blockquote>
+<h4>El tipus de lletra del text (Font)</h4>
+<p>El text llegible que acompanya el codi es dibuixa amb la lletra que triïs al<br />
+camp <strong>Font</strong>.</p>
+<p>Les lletres <strong>OCR</strong> (OCR-A, OCR-B i les seves variants) són les clàssiques dels codis de<br />
+barres: cada xifra està dissenyada perquè el lector la distingeixi sense errors. <strong>No<br />
+inclouen caràcters especials</strong> (la <strong>ñ</strong>, accents com ara á/é, ni símbols); és una<br />
+tipografia pròpia del codi de barres. Si el teu text necessita aquests caràcters, tria<br />
+<strong>Helvetica</strong> (a Mac) o <strong>Arial</strong> (a Windows), que són les fonts normals i sí<br />
+que els tenen.</p>
+<h4>Mides del codi</h4>
+<ul>
+<li>L'<strong>Alçada</strong> no s'escriu: és un selector amb els <strong>3 mides estàndard GS1</strong> que<br />
+  es calculen segons l'amplada per a DataMatrix <em>(si la dada és llarga, només n'hi<br />
+  haurà 1: la quadrada)</em>.</li>
+<li>Tria la que s'adapti millor a la teva etiqueta; el programa calcula la resta.</li>
+</ul>
+<h4>Com es calcula la mida mínima?</h4>
+<p>El codi de barres <strong>no pot ser més petit del que les seves pròpies dades<br />
+permeten</strong>: com més dades conté, més mòduls necessita i més amplada mínima<br />
+ocupa.</p>
+<p>El programa calcula aquest mínim a partir de les dades que imprimiràs:</p>
+<ul>
+<li><strong>Amb un valor de mostra:</strong> el mínim es calcula amb aquest únic valor.</li>
+<li><strong>Amb una columna d'Excel:</strong> es recorren <strong>totes les files</strong> i es calcula la<br />
+  mida que generaria cadascuna. El mínim final és el de la <strong>fila que conté<br />
+  més dades</strong> (la que genera el codi més gran).</li>
+</ul>
+<p>Així, encara que cada fila tingui una quantitat diferent de dades, <strong>tots els codis<br />
+de la columna s'imprimeixen amb la mateixa mida</strong>: el mínim necessari perquè el<br />
+codi més gran hi càpiga.</p>
+<blockquote>
+<p>Si escrius una amplada menor que el mínim, el programa l'ajusta automàticament<br />
+al valor mínim. El selector d'<strong>Alçada</strong> es recalcula per oferir-te les 3<br />
+mides GS1 possibles per a aquesta amplada.</p>
+</blockquote>
+<h4>Dada llarga → només quadrat</h4>
+<p>Per limitacions de l'estàndard GS1, els formats rectangulars (16×36, 16×48) només<br />
+admeten fins a <strong>49 caràcters</strong>.</p>
+<ul>
+<li><strong>Dada ≤ 49 caràcters</strong> → 3 opcions d'alçada (quadrat + 2 rectangulars).</li>
+<li><strong>Dada &gt; 49 caràcters</strong> → només queda el quadrat: l'<strong>alçada no canvia</strong> (és<br />
+  igual a l'amplada) i el selector d'alçada només mostra 1 única opció.</li>
+</ul>
+<p>Resum: com més llarga és la dada, més gran i més quadrat és el codi. <strong>No és una<br />
+fallada del programa, és una limitació de l'estàndard GS1.</strong></p>
+<hr /></body></html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Barcode Guide — PDF417</h1>
+<hr />
+<h2>What is it and what is it used for</h2>
+<p><strong>PDF417</strong> is a two-dimensional barcode (rectangular with a textured appearance) designed<br />
+to store <strong>a lot of text</strong> in a small space. It is widely used in <strong>logistics and<br />
+parcels, shipping and delivery notes</strong>, IDs and documents.</p>
+<h2>What the code stores</h2>
+<p>It can store <strong>any text</strong>: letters, numbers, symbols, spaces, and multiple<br />
+lines if you separate them with <code>|</code>.</p>
+<p>There are no character restrictions: everything you type is encoded as-is. It only checks<br />
+that the data <strong>is not empty</strong>.</p>
+<h2>Format and capabilities</h2>
+<p>The program automatically determines the size based on the text.</p>
+<ul>
+<li><strong>There is no fixed character limit</strong>: the more data it carries, the larger the<br />
+  code becomes. The minimum size is calculated based on the longest piece of data<br />
+  you are going to print.</li>
+</ul>
+<blockquote>
+<p>As with the other codes: if you enter a <strong>Width</strong> smaller than the minimum required,<br />
+the program automatically adjusts it so the code fits.</p>
+</blockquote>
+<h2>Sample value and Excel column</h2>
+<p>By default it shows an example value. You can also use an <strong>Excel column</strong><br />
+(for example the <code>pdf417</code> column in the example files). When you select the<br />
+column, <strong>all rows</strong> are validated: if any row is <strong>empty</strong>, it appears in the dialog<br />
+viewer indicating which row fails.</p>
+<h2>Multiple lines (human-readable text under the code)</h2>
+<p>Just like with DataMatrix, you can <strong>split the text into multiple lines</strong> so the<br />
+reader app can distinguish each field. Two ways:</p>
+<ul>
+<li><strong><code>|</code> separator</strong>: the simplest. Each <code>|</code> separates a field and each field becomes a<br />
+  line.</li>
+<li><strong>Opening / Closing</strong>: you define which character marks the <em>start</em> and which the <em>end</em> of<br />
+  each field. The program splits the data using those characters (e.g. opening <code>&lt;&lt;</code><br />
+  and closing <code>&gt;&gt;</code>).</li>
+</ul>
+<p>The human-readable text does not have to always appear under the code: you can <strong>position</strong><br />
+the block <strong>below, above, to the left, or to the right</strong>, and <strong>align it</strong> in the<br />
+<strong>9 positions</strong> (top / middle / bottom × left / center / right).</p>
+<h2>Data source</h2>
+<p>As with all symbologies, the code value can come from three sources:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fixed text</strong></td>
+<td>You type the value manually in the profile</td>
+</tr>
+<tr>
+<td><strong>External data column</strong></td>
+<td>The value comes from an Excel/CSV column, row by row</td>
+</tr>
+<tr>
+<td><strong>Internal numbering</strong></td>
+<td>The value is generated using a mask (e.g. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>The same code rules (size, separators, etc.) apply to all three.</p>
+<h2>Dialog fields</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Width (mm)</strong></td>
+<td>Horizontal size of the code</td>
+</tr>
+<tr>
+<td><strong>Height (mm)</strong></td>
+<td>Height of the code</td>
+</tr>
+<tr>
+<td><strong>Font</strong></td>
+<td>Typeface of the human-readable text</td>
+</tr>
+<tr>
+<td><strong>Body</strong></td>
+<td>Text font size. <strong>0 = no text</strong></td>
+</tr>
+<tr>
+<td><strong>Alignment</strong></td>
+<td>9 positions for the text block (top/middle/bottom × left/center/right)</td>
+</tr>
+<tr>
+<td><strong>Line spacing</strong></td>
+<td>Space between text lines (multiple)</td>
+</tr>
+<tr>
+<td><strong>Position</strong></td>
+<td>Location of the text block: below, above, left, or right</td>
+</tr>
+<tr>
+<td><strong>Distance</strong></td>
+<td>Space between the code and the text</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>To hide the human-readable text, set Body to 0</strong>: the code remains alone,<br />
+with no text around it.</p>
+</blockquote>
+<h2>Text typeface (Font)</h2>
+<p>The human-readable text that accompanies the code is drawn with the typeface you<br />
+select in the <strong>Font</strong> field.</p>
+<p><strong>OCR</strong> fonts (OCR-A, OCR-B, and their variants) are the classic barcode fonts:<br />
+each digit is designed so the reader can distinguish it without error. They <strong>do<br />
+not include special characters</strong> (the <strong>ñ</strong>, accents like á/é, or symbols); they are a<br />
+typeface specific to barcodes. If your text needs those characters, choose<br />
+<strong>Helvetica</strong> (on Mac) or <strong>Arial</strong> (on Windows), which are standard fonts that do<br />
+include them.</p>
+<h2>Common errors</h2>
+<p>PDF417 accepts almost any value, so there are few errors:</p>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Empty data in column</td>
+<td>A row has no value</td>
+<td>Fill in the row or remove that row from the column</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

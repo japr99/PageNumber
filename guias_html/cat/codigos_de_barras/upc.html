@@ -1,0 +1,165 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guia de Codis de Barres — UPC-A / UPC-E</h1>
+<hr />
+<h2>Què és i per a què serveix</h2>
+<p>El <strong>UPC</strong> és el codi de barres de producte més usat a <strong>Estats Units i<br />
+Canadà</strong> (el "cosí americà" del EAN). Per això el veuràs en productes de Nord-amèrica<br />
+o en etiquetes pensades per a aquest mercat. És un codi numèric de barres verticals.</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Dígits</th>
+<th>Per a què s'usa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>UPC-A</strong></td>
+<td>12</td>
+<td>Codi estàndard de producte als EUA/Canadà</td>
+</tr>
+<tr>
+<td><strong>UPC-E</strong></td>
+<td>6</td>
+<td>Versió reduïda per a productes petits</td>
+</tr>
+</tbody>
+</table>
+<p>El <strong>UPC-E</strong> és una forma compacta del UPC-A: guarda la mateixa informació amb menys<br />
+dígits quan el codi ho permet, ideal per a etiquetes amb poc espai.</p>
+<h2>Què guarda el codi</h2>
+<p>Només <strong>números</strong> (sense lletres ni símbols).</p>
+<ul>
+<li><strong>UPC-A</strong>: exactament 12 dígits. L'últim és el <strong>dígit de control</strong>, que es<br />
+  comprova perquè el lector sàpiga si el codi s'ha llegit bé.</li>
+<li><strong>UPC-E</strong>: exactament 6 dígits. El <strong>primer dígit ha de ser 0 o 1</strong> (identifica la<br />
+  família de números del sistema). La resta són les dades.</li>
+</ul>
+<p>Com que és un codi de producte, funciona igual que el EAN: <strong>els números van dins del<br />
+codi</strong>, entre les barres.</p>
+<h2>Valor de mostra i columna Excel</h2>
+<p>Per defecte mostra un valor d'exemple. També pots fer servir una <strong>columna<br />
+d'Excel</strong>: en seleccionar-la es validen <strong>totes les files</strong> i, si alguna és <strong>buida</strong>,<br />
+<strong>no té els dígits correctes</strong> o <strong>el dígit de control falla</strong>, apareix al<br />
+visor del diàleg indicant quina fila té el problema.</p>
+<h2>L'origen de les dades</h2>
+<p>Com en totes les simbologies, el valor del codi pot sortir de tres llocs:</p>
+<table>
+<thead>
+<tr>
+<th>Origen</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Text fix</strong></td>
+<td>Escrius el valor a mà al perfil</td>
+</tr>
+<tr>
+<td><strong>Columna de dades externes</strong></td>
+<td>El valor ve d'una columna d'Excel/CSV, fila a fila</td>
+</tr>
+<tr>
+<td><strong>Numeració interna</strong></td>
+<td>El valor es genera amb una màscara (p. ex. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Per a les 3 s'apliquen les mateixes regles del codi (mida, etc.).</p>
+<h2>Els dígits del codi</h2>
+<p>En el UPC els <strong>números van dins del codi</strong>, entre les barres, com a part del<br />
+propi símbol (no és un bloc de text a part que puguis moure). Ajustes la seva mida<br />
+amb la casella <strong>Cos</strong>.</p>
+<h2>Camps del diàleg</h2>
+<table>
+<thead>
+<tr>
+<th>Camp</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Amplada</strong></td>
+<td>Mida horitzontal del codi</td>
+</tr>
+<tr>
+<td><strong>Alçada</strong></td>
+<td>Alçada del codi</td>
+</tr>
+<tr>
+<td><strong>Font</strong></td>
+<td>Tipus de lletra dels dígits del codi</td>
+</tr>
+<tr>
+<td><strong>Cos</strong></td>
+<td>Mida de lletra dels dígits. <strong>0 = sense text</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A diferència del QR, el PDF417 o el Code 128, en el UPC <strong>no</strong> es pot moure el<br />
+text al voltant del codi: els dígits van fixos dins de les barres.</p>
+<h2>El tipus de lletra dels dígits (Font)</h2>
+<p>Els dígits del codi es dibuixen amb la lletra que triïs al camp <strong>Font</strong>.</p>
+<p>Les lletres <strong>OCR</strong> (OCR-A, OCR-B i les seves variants) són les clàssiques dels codis de<br />
+barres: cada xifra està dissenyada perquè el lector la distingeixi sense errors. <strong>No<br />
+inclouen caràcters especials</strong> (la <strong>ñ</strong>, accents com ara á/é, ni símbols); és una<br />
+tipografia pròpia del codi de barres. Com que el UPC és <strong>només números</strong>, l'OCR és la<br />
+recomanada. Si el teu text necessités caràcters especials, faries servir Helvetica (a Mac)<br />
+o Arial (a Windows), que són les fonts normals i sí que els tenen — tot i que al UPC<br />
+només hi caben dígits.</p>
+<h2>Errors típics</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solució</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ha de tenir 12 dígits</td>
+<td>El UPC-A té una altra longitud</td>
+<td>Comprova la xifra (12 dígits)</td>
+</tr>
+<tr>
+<td>Ha de tenir 6 dígits</td>
+<td>El UPC-E té una altra longitud</td>
+<td>Comprova la xifra (6 dígits)</td>
+</tr>
+<tr>
+<td>El primer dígit ha de ser 0 o 1</td>
+<td>El UPC-E comença per una altra xifra</td>
+<td>Canvia el primer dígit a 0 o 1</td>
+</tr>
+<tr>
+<td>El dígit de control no coincideix</td>
+<td>Última xifra mal calculada</td>
+<td>Recalcula el dígit de control</td>
+</tr>
+<tr>
+<td>Dada buida a la columna</td>
+<td>Alguna fila no té valor</td>
+<td>Omple la fila o treu aquesta fila de la columna</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

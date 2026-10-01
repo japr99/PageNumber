@@ -1,0 +1,165 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Barcode Guide — UPC-A / UPC-E</h1>
+<hr />
+<h2>What is it and what is it used for</h2>
+<p>The <strong>UPC</strong> is the most widely used product barcode in the <strong>United States and<br />
+Canada</strong> (the "American cousin" of the EAN). That is why you will see it on North American<br />
+products or on labels designed for that market. It is a numeric vertical-bar code.</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Digits</th>
+<th>Used for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>UPC-A</strong></td>
+<td>12</td>
+<td>Standard product code in US/Canada</td>
+</tr>
+<tr>
+<td><strong>UPC-E</strong></td>
+<td>6</td>
+<td>Compact version for small products</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>UPC-E</strong> is a compact form of UPC-A: it stores the same information with fewer<br />
+digits when the code allows it, ideal for labels with limited space.</p>
+<h2>What the code stores</h2>
+<p><strong>Numbers only</strong> (no letters or symbols).</p>
+<ul>
+<li><strong>UPC-A</strong>: exactly 12 digits. The last digit is the <strong>check digit</strong>, which is<br />
+  verified so the reader can tell if the code was read correctly.</li>
+<li><strong>UPC-E</strong>: exactly 6 digits. The <strong>first digit must be 0 or 1</strong> (it identifies the<br />
+  number family of the system). The rest are the data.</li>
+</ul>
+<p>As it is a product code, it works the same as the EAN: <strong>the numbers are inside the<br />
+code</strong>, between the bars.</p>
+<h2>Sample value and Excel column</h2>
+<p>By default it shows an example value. You can also use an <strong>Excel<br />
+column</strong>: when you select one, <strong>all rows</strong> are validated and, if any row is <strong>empty</strong>,<br />
+<strong>does not have the correct digits</strong>, or <strong>the check digit fails</strong>, it appears in the<br />
+dialog viewer indicating which row has the problem.</p>
+<h2>Data source</h2>
+<p>As with all symbologies, the code value can come from three sources:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fixed text</strong></td>
+<td>You type the value manually in the profile</td>
+</tr>
+<tr>
+<td><strong>External data column</strong></td>
+<td>The value comes from an Excel/CSV column, row by row</td>
+</tr>
+<tr>
+<td><strong>Internal numbering</strong></td>
+<td>The value is generated using a mask (e.g. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>The same code rules (size, etc.) apply to all three.</p>
+<h2>Code digits</h2>
+<p>In the UPC, the <strong>numbers are inside the code</strong>, between the bars, as part of the<br />
+symbol itself (not a separate text block you can move). You adjust their size<br />
+with the <strong>Body</strong> field.</p>
+<h2>Dialog fields</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Width</strong></td>
+<td>Horizontal size of the code</td>
+</tr>
+<tr>
+<td><strong>Height</strong></td>
+<td>Height of the code</td>
+</tr>
+<tr>
+<td><strong>Font</strong></td>
+<td>Typeface of the code digits</td>
+</tr>
+<tr>
+<td><strong>Body</strong></td>
+<td>Font size of the digits. <strong>0 = no text</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Unlike QR, PDF417, or Code 128, in the UPC the text <strong>cannot</strong> be moved<br />
+around the code: the digits are fixed inside the bars.</p>
+<h2>Digit typeface (Font)</h2>
+<p>The code digits are drawn with the typeface you select in the <strong>Font</strong> field.</p>
+<p><strong>OCR</strong> fonts (OCR-A, OCR-B, and their variants) are the classic barcode fonts:<br />
+each digit is designed so the reader can distinguish it without error. They <strong>do<br />
+not include special characters</strong> (the <strong>ñ</strong>, accents like á/é, or symbols); they are a<br />
+typeface specific to barcodes. Since the UPC is <strong>numbers only</strong>, OCR is the<br />
+recommended choice. If your text needed special characters, you would use Helvetica (on Mac)<br />
+or Arial (on Windows), which are standard fonts that do include them — although in the UPC<br />
+only digits are used.</p>
+<h2>Common errors</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Must have 12 digits</td>
+<td>The UPC-A has a different length</td>
+<td>Check the count (12 digits)</td>
+</tr>
+<tr>
+<td>Must have 6 digits</td>
+<td>The UPC-E has a different length</td>
+<td>Check the count (6 digits)</td>
+</tr>
+<tr>
+<td>The first digit must be 0 or 1</td>
+<td>The UPC-E starts with a different digit</td>
+<td>Change the first digit to 0 or 1</td>
+</tr>
+<tr>
+<td>Check digit does not match</td>
+<td>Last digit calculated incorrectly</td>
+<td>Recalculate the check digit</td>
+</tr>
+<tr>
+<td>Empty data in column</td>
+<td>A row has no value</td>
+<td>Fill in the row or remove that row from the column</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

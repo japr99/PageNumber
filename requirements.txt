@@ -1,0 +1,36 @@
+# Requisitos para Python 3.14 (validado con Python 3.14.5 en Windows)
+anyio==4.12.1
+certifi==2026.1.4
+charset-normalizer==3.4.4
+Cython==3.2.4
+flet==1.0.1
+flet-desktop==1.0.1
+fonttools==4.61.1
+freetype-py==2.5.1
+h11==0.16.0
+httpcore==1.0.9
+httpx==0.28.1
+idna==3.11
+numpy==2.3.5
+oauthlib==3.3.1
+openpyxl==3.1.5
+pandas==3.0.3
+python-calamine>=0.8.2
+python-barcode==0.16.1
+qrcode[pil]>=7.4
+pdf417gen>=0.8.1
+pylibdmtx>=0.1.0
+biip>=0.25.0
+pdfrw==0.4
+pillow==11.3.0
+PyMuPDF==1.27.2
+pypdf==6.0.0
+repath==0.9.0
+reportlab==4.4.2
+screeninfo==0.8.1
+# Windows helpers for DirectWrite/registry
+comtypes==1.2.0
+pywin32==312
+six==1.17.0
+# Build (solo .bat + PageNumberWin.spec + CI de Windows; PyInstaller va ad-hoc)
+pyinstaller_versionfile==3.1.0

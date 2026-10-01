@@ -1,0 +1,728 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guía de Códigos de Barras — DataMatrix</h1>
+<hr />
+<h2>1. DataMatrix (familia de simbologías)</h2>
+<p>El DataMatrix es un código bidimensional que puede trabajar de <strong>tres formas</strong><br />
+distintas, según la opción que elijas en el selector:</p>
+<table>
+<thead>
+<tr>
+<th>Opción del selector</th>
+<th>Qué guarda el código</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DataMatrix personalizado</strong></td>
+<td>Cualquier texto libre (datos propios, varias líneas, una URL…)</td>
+</tr>
+<tr>
+<td><strong>GS1 DataMatrix</strong></td>
+<td>Datos GS1 en formato<code>(AI)valor</code>: <code>(01)...(17)...</code></td>
+</tr>
+<tr>
+<td><strong>DataMatrix GS1 Digital Link</strong></td>
+<td>Los mismos datos GS1, pero dentro de una<strong>dirección web (URL)</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Las tres comparten la <strong>configuración física</strong> del código (tamaño, formato y<br />
+texto legible bajo el símbolo), que se explica al final de esta sección. Lo que<br />
+cambia entre ellas es <strong>qué escribes en los datos</strong>. A continuación se detalla<br />
+cada una.</p>
+<hr />
+<h3>1.1 DataMatrix personalizado</h3>
+<p>Es el DataMatrix "normal": guarda <strong>lo que quieras</strong>, sin validar ningún<br />
+estándar. Solo comprueba que no esté vacío.</p>
+<ul>
+<li><strong>Una sola línea:</strong> escribe el texto directamente.</li>
+<li><strong>Varias líneas:</strong> usa el carácter separador (<code>\|</code> por defecto) entre cada<br />
+  texto; cada bloque separado será una línea distinta.</li>
+</ul>
+<p>Ejemplos:</p>
+<pre><code>Cliente: 1001 | Nombre: Maria Garcia Lopez | DNI: 12345678Z
+ABC12345
+https://ejemplo.com/producto
+</code></pre>
+<p>El primero genera 3 líneas legibles (una por cada <code>|</code>). Los otros generan una<br />
+sola. Resulta útil para meter datos propios de tu software sin seguir GS1.</p>
+<h4>Adaptar el código al lector (inicio y fin de campo)</h4>
+<p>Para que la app lectora distinga cada campo, defines dos controles:</p>
+<ul>
+<li><strong>Apertura</strong>: carácter que marca el <em>inicio</em> de cada campo.</li>
+<li><strong>Cierre</strong>: carácter que marca el <em>fin</em> de cada campo.</li>
+</ul>
+<p>El programa parte el dato en campos usando estos caracteres (quita la apertura<br />
+inicial, divide por <code>cierre+apertura</code>, limpia el cierre del último). Cada campo<br />
+aparece como una línea legible bajo el código y así la app lectora identifica<br />
+dónde termina uno y empieza el siguiente.</p>
+<ul>
+<li><strong>Valor interno</strong> — el botón "Editar texto" abre una ventana: escribes el<br />
+  dato, defines apertura y cierre y ves <strong>en vivo</strong> cómo queda cada campo.</li>
+<li><strong>Dato externo</strong> — al elegir la columna, el programa intenta detectar el<br />
+  separador automáticamente (prueba varios caracteres hasta encontrar el que<br />
+  divide las filas en el mismo número de campos). Es solo una <strong>propuesta y no<br />
+  es del todo fiable</strong> —si el carácter también aparece dentro de los datos<br />
+  (p. ej. comas en una dirección) o las filas no tienen siempre el mismo número<br />
+  de campos, puede acertar el candidato equivocado o quedarse con <code>|</code> por<br />
+  defecto—; revisa siempre que Apertura y Cierre coincidan con el separador real.</li>
+</ul>
+<p>En los archivos de datos de ejemplo tienes columnas con separadores distintos para<br />
+probar:</p>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Separador</th>
+<th>Apertura / Cierre en el perfil</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>datamatrix_pipe</code></td>
+<td><code>\|</code></td>
+<td>vacía /<code>\|</code></td>
+</tr>
+<tr>
+<td><code>datamatrix_semicolon</code></td>
+<td><code>;</code></td>
+<td>vacía /<code>;</code></td>
+</tr>
+<tr>
+<td><code>datamatrix_chevron</code></td>
+<td><code>&lt;&lt;</code> <code>&gt;&gt;</code></td>
+<td><code>&lt;&lt;</code> / <code>&gt;&gt;</code></td>
+</tr>
+<tr>
+<td><code>datamatrix_brace</code></td>
+<td><code>{</code> <code>}</code></td>
+<td><code>{</code> / <code>}</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo con apertura <code>&lt;&lt;</code> y cierre <code>&gt;&gt;</code>:</p>
+<pre><code>&lt;&lt;Cliente: 1001&gt;&gt;&lt;&lt;Nombre: Maria Garcia Lopez&gt;&gt;&lt;&lt;DNI: 12345678Z&gt;&gt;
+</code></pre>
+<p>→ tres campos: "Cliente: 1001", "Nombre: Maria Garcia Lopez", "DNI: 12345678Z".</p>
+<p>Con Apertura vacía y Cierre <code>|</code> es el comportamiento clásico:<br />
+<code>Cliente: 1001 | Nombre: ... | DNI: ...</code>.</p>
+<blockquote>
+<p>Con ambos separadores vacíos, el dato es un único campo.</p>
+</blockquote>
+<p>Estas líneas de texto no tienen por qué quedar siempre bajo el código: puedes<br />
+<strong>posicionarlas</strong> en cualquier lugar alrededor del mismo (<strong>debajo, encima,<br />
+a la izquierda o a la derecha</strong>) y <strong>alinearlas</strong> en las 9 posiciones posibles<br />
+(superior / medio / inferior × izquierda / centro / derecha) con los campos<br />
+<strong>Posición HRI</strong> y <strong>Alineación HRI</strong> del perfil.</p>
+<hr />
+<h3>1.2 GS1 DataMatrix</h3>
+<p>Variante para identificación de productos con el estándar GS1. Los datos se<br />
+organizan por <em>Application Identifiers</em> (AI) — cada AI es un número que<br />
+identifica qué significa el valor que le sigue.</p>
+<h4>Formato de entrada</h4>
+<p>Cada bloque se escribe como <code>(AI)valor</code> sin espacios entre bloques:</p>
+<pre><code>(01)09506000117843(17)250124(10)POIG8F(21)1CBFNO6B9M
+</code></pre>
+<p>Los paréntesis son solo para lectura humana. Al generar el código se eliminan y<br />
+se inyecta un carácter separador invisible entre campos variables.</p>
+<h4>Ejemplos comunes</h4>
+<table>
+<thead>
+<tr>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Producto + lote + fecha</td>
+<td><code>(01)09506000117843(17)250124(10)LOTE001</code></td>
+</tr>
+<tr>
+<td>Producto + serie</td>
+<td><code>(01)09506000117843(21)SERIE12345</code></td>
+</tr>
+<tr>
+<td>Producto + lote + serie</td>
+<td><code>(01)09506000117843(10)LOTE001(21)SERIE12345</code></td>
+</tr>
+</tbody>
+</table>
+<h4>AIs soportados (GS1)</h4>
+<table>
+<thead>
+<tr>
+<th>AI</th>
+<th>Significado</th>
+<th>Formato</th>
+<th>Tipo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00</td>
+<td>SSCC (código de caja)</td>
+<td>18 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td><strong>01</strong></td>
+<td><strong>GTIN (código de producto)</strong></td>
+<td><strong>14 dígitos</strong></td>
+<td><strong>Fijo</strong></td>
+</tr>
+<tr>
+<td>02</td>
+<td>GTIN del contenido</td>
+<td>14 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Lote / Batch</td>
+<td>1-20 caracteres</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Fecha fabricación (AAMMDD)</td>
+<td>6 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Fecha pago (AAMMDD)</td>
+<td>6 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Fecha envasado (AAMMDD)</td>
+<td>6 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Fecha consumo preferente (AAMMDD)</td>
+<td>6 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Fecha venta recomendada (AAMMDD)</td>
+<td>6 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td><strong>17</strong></td>
+<td><strong>Fecha caducidad (AAMMDD)</strong></td>
+<td><strong>6 dígitos</strong></td>
+<td><strong>Fijo</strong></td>
+</tr>
+<tr>
+<td>20</td>
+<td>Variante de producto</td>
+<td>2 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td><strong>21</strong></td>
+<td><strong>Número de serie</strong></td>
+<td><strong>1-20 caracteres</strong></td>
+<td><strong>Variable</strong></td>
+</tr>
+<tr>
+<td>22</td>
+<td>Versión de producto</td>
+<td>1-20 caracteres</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Cantidad de unidades</td>
+<td>1-8 dígitos</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>240</td>
+<td>Código adicional fabricante</td>
+<td>1-30 caracteres</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>241</td>
+<td>Código de componente</td>
+<td>1-30 caracteres</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>242</td>
+<td>ID alimento mascotas</td>
+<td>1-6 dígitos</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>250</td>
+<td>Nº serie de envío</td>
+<td>1-30 caracteres</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>251</td>
+<td>Enlace fuente primaria</td>
+<td>1-30 caracteres</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>253</td>
+<td>GDTI (documento)</td>
+<td>13 dígitos + 17 car.</td>
+<td>Compuesta</td>
+</tr>
+<tr>
+<td>254</td>
+<td>GLN de origen</td>
+<td>13 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>255</td>
+<td>GCN (cupón)</td>
+<td>13 dígitos + 12 díg.</td>
+<td>Compuesta</td>
+</tr>
+<tr>
+<td>310x</td>
+<td>Peso neto kg</td>
+<td>6 dígitos (x=decimal)</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>311x</td>
+<td>Largo / Longitud m</td>
+<td>6 dígitos (x=decimal)</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>312x</td>
+<td>Ancho m</td>
+<td>6 dígitos (x=decimal)</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>313x</td>
+<td>Alto / Grosor m</td>
+<td>6 dígitos (x=decimal)</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>314x</td>
+<td>Área / Superficie m²</td>
+<td>6 dígitos (x=decimal)</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>315x</td>
+<td>Volumen neto l</td>
+<td>6 dígitos (x=decimal)</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>316x</td>
+<td>Volumen neto m³</td>
+<td>6 dígitos (x=decimal)</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>320x</td>
+<td>Peso neto lb</td>
+<td>6 dígitos (x=decimal)</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>330x</td>
+<td>Peso bruto kg</td>
+<td>6 dígitos (x=decimal)</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>340x</td>
+<td>Superficie yd²</td>
+<td>6 dígitos (x=decimal)</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Nº orden de compra</td>
+<td>1-30 caracteres</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>401</td>
+<td>GINC (identificación envío)</td>
+<td>1-30 caracteres</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>402</td>
+<td>GSIN (consignación)</td>
+<td>17 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Código de ruta</td>
+<td>1-30 caracteres</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>410</td>
+<td>GLN del comprador</td>
+<td>13 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>411</td>
+<td>GLN facturación</td>
+<td>13 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>412</td>
+<td>GLN distribuidor</td>
+<td>13 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>413</td>
+<td>GLN destinatario final</td>
+<td>13 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>414</td>
+<td>GLN ubicación física</td>
+<td>13 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>415</td>
+<td>GLN del proveedor</td>
+<td>13 dígitos</td>
+<td>Fijo</td>
+</tr>
+<tr>
+<td>420</td>
+<td>Código postal nacional</td>
+<td>1-20 caracteres</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>421</td>
+<td>Código postal internacional</td>
+<td>3 dígitos + 9 car.</td>
+<td>Compuesta</td>
+</tr>
+<tr>
+<td>422</td>
+<td>País de origen</td>
+<td>3 dígitos (ISO)</td>
+<td>Fijo</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Nota:</strong> los AIs en <strong>negrita</strong> son los más usados. Los de tipo "Fijo" se<br />
+validan automáticamente (longitud exacta y solo dígitos). Si usas uno de tipo<br />
+"Compuesta" la validación básica comprueba que tenga valor pero no valida cada<br />
+parte.</p>
+</blockquote>
+<h4>Columna Excel</h4>
+<p>Cada celda debe contener el formato completo con paréntesis:</p>
+<pre><code>(01)09506000117843(17)250124(10)POIG8F(21)1CBFNO6B9M
+</code></pre>
+<p>Al seleccionar la columna se validan <strong>todas las filas</strong>. Si hay errores aparecen<br />
+en el visor del diálogo indicando qué filas fallan y por qué. Los datos GS1 no se<br />
+parten por separadores: usan su propia estructura, y por eso se muestra la etiqueta<br />
+"Datos GS1 detectados".</p>
+<h4>Errores típicos</h4>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AI 01 debe tener 14 dígitos (GTIN)</code></td>
+<td>El GTIN tiene 13 dígitos</td>
+<td>Añade un 0 al inicio</td>
+</tr>
+<tr>
+<td><code>AI 17 debe tener 6 dígitos (YYMMDD)</code></td>
+<td>La fecha tiene menos de 6</td>
+<td>Usa formato AAMMDD (ej: 250124)</td>
+</tr>
+<tr>
+<td><code>AI 01 debe ser numérico</code></td>
+<td>El GTIN contiene letras</td>
+<td>Revisa el valor, solo dígitos</td>
+</tr>
+<tr>
+<td><code>AI 10 sin valor</code></td>
+<td>El lote está vacío</td>
+<td>Añade el número de lote</td>
+</tr>
+<tr>
+<td><code>Formato GS1 HRI inválido</code></td>
+<td>No se reconoce el formato</td>
+<td>Usa<code>(AI)valor</code> sin espacios entre bloques</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>1.3 DataMatrix GS1 Digital Link</h3>
+<blockquote>
+<p>Fuente de esta explicación: estándar GS1 Digital Link de GS1 Spain<br />
+(<a href="https://www.gs1es.org/estandares-gs1-identificar/gs1-digital-link/">https://www.gs1es.org/estandares-gs1-identificar/gs1-digital-link/</a>).</p>
+</blockquote>
+<h4>¿Qué es?</h4>
+<p><strong>GS1 Digital Link</strong> es el estándar de GS1 que <strong>inserta el sistema de<br />
+identificación GS1 dentro de una dirección web (URL)</strong>. El código de barras ya no<br />
+guarda solo "el número de producto", sino <strong>un enlace</strong> que lleva a la página web<br />
+de ese producto.</p>
+<p>La gran ventaja es cómo se <strong>lee</strong>: hoy, la mayoría de la gente lleva un móvil que<br />
+no entiende un GS1 clásico, pero <strong>cualquier móvil escanea una URL con la cámara</strong><br />
+y abre la web automáticamente. Aunque GS1 Digital Link se popularizó con el QR,<br />
+también puede ir en un <strong>DataMatrix</strong>, que es justo esta opción del selector.</p>
+<h4>¿Qué le aporta a tu cliente (y a ti)?</h4>
+<ul>
+<li><strong>Acceso directo a contenido</strong>: el consumidor escanea y ve ingredientes,<br />
+  alérgenos, instrucciones de uso, recetas, productos relacionados o la tienda<br />
+  online de la marca.</li>
+<li><strong>Menos etiquetas</strong>: concentra en un solo código toda la información que hoy<br />
+  obligaría a imprimir varias etiquetas o varios códigos.</li>
+<li><strong>Trazabilidad</strong>: con el lote, la fecha de caducidad o consumo preferente dentro<br />
+  del código se pueden retirar del almacén productos caducados, con alertas<br />
+  alimentarias o falsificados.</li>
+<li><strong>Devoluciones más fáciles</strong> para el distribuidor y <strong>mejor intercambio de<br />
+  datos</strong> con los socios comerciales.</li>
+<li><strong>Implantación gradual</strong>: puedes empezar solo con el <strong>GTIN</strong> (el caso más<br />
+  simple) e ir añadiendo más "identificadores de aplicación" según lo necesites.</li>
+<li><strong>Sostenibilidad y pasaporte digital de producto</strong>: permite enlazar datos de<br />
+  huella de carbono, reciclaje o reacondicionamiento (requisito que impulsa la<br />
+  Unión Europea).</li>
+</ul>
+<h4>¿Cómo se diferencia del GS1 DataMatrix de siempre?</h4>
+<p>Ambos usan los <strong>mismos identificadores (AI)</strong> y son <strong>funcionalmente<br />
+equivalentes</strong>: dicen lo mismo sobre el producto. La diferencia es solo <strong>cómo se<br />
+escriben los datos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>GS1 DataMatrix (element string)</th>
+<th>GS1 Digital Link (URL)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forma de escribir</td>
+<td><code>(01)09506000117843(17)250124</code></td>
+<td><code>https://id.gs1.org/01/09506000117843/...</code></td>
+</tr>
+<tr>
+<td>Quién lo lee</td>
+<td>Escáneres industriales</td>
+<td>Móvil con cámara (abre la web)</td>
+</tr>
+<tr>
+<td>Utilidad</td>
+<td>Inventario y logística</td>
+<td>Conectar con el consumidor y la web</td>
+</tr>
+</tbody>
+</table>
+<h4>Formato de entrada</h4>
+<p>Un GS1 Digital Link es una <strong>URL</strong> que incluye el dominio de GS1 y, a<br />
+continuación, los identificadores (AI) separados por barras <code>/</code>. Los campos de<br />
+longitud variable (como el lote o el número de serie) se escriben también en el<br />
+enlace y, si hace falta, los campos de fecha van al final como parámetros <code>?</code>:</p>
+<pre><code>https://id.gs1.org/01/{GTIN}/10/{lote}?17={caducidad}&amp;21={serie}
+</code></pre>
+<p>Ejemplo real:</p>
+<pre><code>https://id.gs1.org/01/09506000117843/10/POIG8F?17=250124&amp;21=1CBFNO6B9M
+</code></pre>
+<h4>Ejemplos comunes</h4>
+<table>
+<thead>
+<tr>
+<th>Uso</th>
+<th>Ejemplo (URL GS1 Digital Link)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Producto + lote + serie</td>
+<td><code>https://id.gs1.org/01/09506000117843/10/LOTE001?21=SERIE12345</code></td>
+</tr>
+<tr>
+<td>Producto + lote + fecha</td>
+<td><code>https://id.gs1.org/01/09506000117843/10/LOTE001?17=250124</code></td>
+</tr>
+<tr>
+<td>Producto + serie + fecha</td>
+<td><code>https://id.gs1.org/01/09506000117843/10/LOTE001?17=250124&amp;21=SERIE12345</code></td>
+</tr>
+</tbody>
+</table>
+<h4>Regla importante con las fechas</h4>
+<p>Los <strong>identificadores de longitud fija con fecha</strong> (como el <code>17</code> de caducidad, el<br />
+<code>15</code> de consumo preferente…) pueden ir en el enlace <strong>antes</strong> de un campo<br />
+variable, pero <strong>una vez que aparece un campo variable (como el lote <code>10</code> o el<br />
+serie <code>21</code>), las fechas pasan a los parámetros <code>?</code> del final</strong>. Esta regla la<br />
+impone el propio estándar y el programa la <strong>valida automáticamente</strong>.</p>
+<h4>Columna Excel</h4>
+<p>Puedes usar una columna de Excel con una <strong>URL completa GS1 Digital Link</strong> por celda.<br />
+Al seleccionar la columna se validan <strong>todas las filas</strong>: cada valor <strong>tiene que ser<br />
+una URL GS1 Digital Link válida</strong> (no vale una dirección web cualquiera).</p>
+<ul>
+<li>Si necesitas guardar una URL libre sin validar, usa la variante<br />
+<strong>DataMatrix personalizado</strong> en lugar de esta.</li>
+</ul>
+<h4>Errores típicos</h4>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>URI GS1 Digital Link inválida: ...</code></td>
+<td>La dirección no cumple el estándar</td>
+<td>Revisa que empiece por<code>https://id.gs1.org/01/...</code></td>
+</tr>
+<tr>
+<td><code>URI GS1 Digital Link inválida</code></td>
+<td>Pusiste una URL normal sin GTIN 01</td>
+<td>Usa DataMatrix personalizado o añade<code>01/{GTIN}</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Consejo:</strong> si el dato es un enlace largo, recuerda que, como en las otras dos<br />
+variantes, el código se hace <strong>más grande y más cuadrado</strong> (ver "Tamaños del<br />
+código" más abajo). Con URLs muy largas solo quedará disponible el formato<br />
+cuadrado.</p>
+</blockquote>
+<h4>Campos del diálogo</h4>
+<p>Son <strong>los mismos</strong> que el resto de la familia DataMatrix (ver 1.4). En esta<br />
+variante no hay separadores de campo: el texto legible bajo el código muestra la<br />
+URL completa.</p>
+<hr />
+<h3>1.4 Común a la familia (configuración del código)</h3>
+<h4>Campos del diálogo</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ancho</strong></td>
+<td>Tamaño horizontal del código en mm</td>
+</tr>
+<tr>
+<td><strong>Alto</strong></td>
+<td>Los 3 tamaños GS1 disponibles — elige el que prefieras<em>(si el dato es largo, solo habrá 1: el cuadrado)</em></td>
+</tr>
+<tr>
+<td><strong>Formato</strong></td>
+<td>Cuadrado (automático) o rectangular</td>
+</tr>
+<tr>
+<td><strong>Fuente HRI</strong></td>
+<td>Tipo de letra del texto legible bajo el código o sobre el</td>
+</tr>
+<tr>
+<td><strong>Cuerpo HRI</strong></td>
+<td>Tamaño de letra del texto. 0 = sin texto</td>
+</tr>
+<tr>
+<td><strong>Distancia HRI</strong></td>
+<td>Espacio entre el código y el texto</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Para ocultar el texto legible, pon Cuerpo en 0</strong>: el código se queda solo,<br />
+sin texto alrededor.</p>
+</blockquote>
+<h4>El tipo de letra del texto (Fuente)</h4>
+<p>El texto legible que acompaña al código se dibuja con la letra que elijas en el<br />
+campo <strong>Fuente</strong>.</p>
+<p>Las letras <strong>OCR</strong> (OCR-A, OCR-B y sus variantes) son las clásicas de los códigos de<br />
+barras: cada cifra está diseñada para que el lector la distinga sin errores. <strong>No<br />
+incluyen caracteres especiales</strong> (la <strong>ñ</strong>, acentos como á/é, ni símbolos); es una<br />
+tipografía propia del código de barras. Si tu texto necesita esos caracteres, elige<br />
+<strong>Helvetica</strong> (en Mac) o <strong>Arial</strong> (en Windows), que son las fuentes normales y sí<br />
+los tienen.</p>
+<h4>Tamaños del código</h4>
+<ul>
+<li>El <strong>Alto</strong> no se escribe: es un selector con los <strong>3 tamaños estándar GS1</strong> que<br />
+  se calculan segun el ancho para DataMatrix <em>(si el dato es largo, solo habrá 1:<br />
+  el cuadrado)</em>.</li>
+<li>Elige el que mejor se adapte a tu etiqueta; el programa calcula el resto.</li>
+</ul>
+<h4>¿Cómo se calcula el tamaño mínimo?</h4>
+<p>El código de barras <strong>no puede ser más pequeño de lo que sus propios datos<br />
+permiten</strong>: cuantos más datos contiene, más módulos necesita y más ancho mínimo<br />
+ocupa.</p>
+<p>El programa calcula ese mínimo a partir de los datos que vas a imprimir:</p>
+<ul>
+<li><strong>Con un valor de muestra:</strong> el mínimo se calcula con ese único valor.</li>
+<li><strong>Con una columna de Excel:</strong> se recorren <strong>todas las filas</strong> y se calcula el<br />
+  tamaño que generaría cada una. El mínimo final es el de la <strong>fila que contiene<br />
+  más datos</strong> (la que genera el código más grande).</li>
+</ul>
+<p>Así, aunque cada fila tenga distinta cantidad de datos, <strong>todos los códigos de la<br />
+columna se imprimen con el mismo tamaño</strong>: el mínimo necesario para que el código<br />
+más grande quepa.</p>
+<blockquote>
+<p>Si escribes un ancho menor que el mínimo, el programa lo ajusta automáticamente<br />
+al valor mínimo. El selector de <strong>Alto</strong> se recalcula para ofrecerte los 3<br />
+tamaños GS1 posibles para ese ancho.</p>
+</blockquote>
+<h4>Dato largo → solo cuadrado</h4>
+<p>Por limitaciones del estándar GS1, los formatos rectangulares (16×36, 16×48) solo<br />
+admiten hasta <strong>49 caracteres</strong>.</p>
+<ul>
+<li><strong>Dato ≤ 49 caracteres</strong> → 3 opciones de alto (cuadrado + 2 rectangulares).</li>
+<li><strong>Dato &gt; 49 caracteres</strong> → solo queda el cuadrado: el <strong>alto no cambia</strong> (es<br />
+  igual al ancho) y el selector de alto solo muestra 1 sola opción.</li>
+</ul>
+<p>Resumen: cuanto más largo el dato, más grande y más cuadrado el código. <strong>No es un<br />
+fallo del programa, es una limitación del estándar GS1.</strong></p>
+<hr /></body></html>

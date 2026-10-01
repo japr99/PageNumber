@@ -1,0 +1,160 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guia de Codis de Barres — QR</h1>
+<hr />
+<h2>Què és i per a què serveix</h2>
+<p>El <strong>QR</strong> (codi de resposta ràpida) és un codi bidimensional de forma quadrada<br />
+amb un patró a les cantonades que permet <strong>llegir-lo molt ràpid</strong> amb qualsevol mòbil.</p>
+<p>És el codi més conegut perquè l'escanejes amb la càmera del telèfon. S'usa per a<br />
+<strong>enllaços web, informació de producte, tiquets, targetes de visita, menús de<br />
+restaurants</strong> i qualsevol text curt que vulguis compartir.</p>
+<p>Té una protecció incorporada que fa que, encara que part del codi s'embruti o<br />
+es faci malbé, <strong>continuï llegint-se</strong>.</p>
+<h2>Què guarda el codi</h2>
+<p>Pot guardar <strong>qualsevol text</strong>: lletres, números, símbols, espais, i diverses<br />
+línies si les separes amb <code>|</code>.</p>
+<p>Es comprova només que la dada <strong>no sigui buida</strong>. Això sí, perquè continuï llegint-se bé,<br />
+es recomana <strong>no passar d'uns 200 caràcters</strong>: com més text, més dens i<br />
+més difícil d'escanejar es torna. El programa t'avisa si la dada és massa llarga.</p>
+<h2>Format i capacitats</h2>
+<ul>
+<li>La mida es mesura amb un únic valor: la <strong>Mida (mm)</strong>, que és el costat del<br />
+  quadrat (amplada = alçada).</li>
+<li>Com més dades porta, més gran ha de ser el codi. La mida mínima es<br />
+  calcula segons la dada més llarga que vulguis imprimir.</li>
+</ul>
+<blockquote>
+<p>Com a la resta de codis: si indiques una <strong>Mida</strong> menor que la mínima<br />
+necessària, el programa l'ajusta automàticament perquè el codi hi càpiga.</p>
+</blockquote>
+<h2>Valor de mostra i columna Excel</h2>
+<p>Per defecte mostra un valor d'exemple. També pots fer servir una <strong>columna<br />
+d'Excel</strong>: en seleccionar-la es validen <strong>totes les files</strong> i, si alguna és <strong>buida</strong>,<br />
+apareix al visor del diàleg indicant quina fila falla.</p>
+<h2>Diverses línies (text llegible sota el codi)</h2>
+<p>Igual que al DataMatrix, pots <strong>partir el text en diverses línies</strong> perquè<br />
+l'app lectora distingeixi cada camp. Dues maneres:</p>
+<ul>
+<li><strong>Separador <code>|</code></strong>: el més senzill. Cada <code>|</code> separa un camp i cada camp és una<br />
+  línia.</li>
+<li><strong>Obertura / Tancament</strong>: defines quin caràcter marca l'<em>inici</em> i quin el <em>fi</em> de<br />
+  cada camp. El programa parteix la dada fent servir aquests caràcters (p. ex. obertura <code>&lt;&lt;</code><br />
+  i tancament <code>&gt;&gt;</code>).</li>
+</ul>
+<p>El text llegible no ha de quedar sempre sota el codi: pots <strong>posicionar</strong><br />
+el bloc <strong>a sota, a sobre, a l'esquerra o a la dreta</strong>, i <strong>alinear-lo</strong> a les<br />
+<strong>9 posicions</strong> (superior / mig / inferior × esquerra / centre / dreta).</p>
+<h2>L'origen de les dades</h2>
+<p>Com en totes les simbologies, el valor del codi pot sortir de tres llocs:</p>
+<table>
+<thead>
+<tr>
+<th>Origen</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Text fix</strong></td>
+<td>Escrius el valor a mà al perfil</td>
+</tr>
+<tr>
+<td><strong>Columna de dades externes</strong></td>
+<td>El valor ve d'una columna d'Excel/CSV, fila a fila</td>
+</tr>
+<tr>
+<td><strong>Numeració interna</strong></td>
+<td>El valor es genera amb una màscara (p. ex. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Per a les 3 s'apliquen les mateixes regles del codi (mida, separadors, etc.).</p>
+<h2>Camps del diàleg</h2>
+<table>
+<thead>
+<tr>
+<th>Camp</th>
+<th>Què fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mida (mm)</strong></td>
+<td>Costat del quadrat (amplada = alçada)</td>
+</tr>
+<tr>
+<td><strong>Font</strong></td>
+<td>Tipus de lletra del text llegible</td>
+</tr>
+<tr>
+<td><strong>Cos</strong></td>
+<td>Mida de lletra del text. <strong>0 = sense text</strong></td>
+</tr>
+<tr>
+<td><strong>Alineació</strong></td>
+<td>9 posicions del bloc de text (superior/mig/inferior × esq/centre/der)</td>
+</tr>
+<tr>
+<td><strong>Interliniat</strong></td>
+<td>Espai entre línies del text (múltiple)</td>
+</tr>
+<tr>
+<td><strong>Posició</strong></td>
+<td>Lloc del bloc de text: a sota, a sobre, esquerra o dreta</td>
+</tr>
+<tr>
+<td><strong>Distància</strong></td>
+<td>Espai entre el codi i el text</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Per amagar el text llegible, posa Cos a 0</strong>: el codi es queda sol,<br />
+sense text al voltant.</p>
+</blockquote>
+<h2>El tipus de lletra del text (Font)</h2>
+<p>El text llegible que acompanya el codi es dibuixa amb la lletra que triïs al<br />
+camp <strong>Font</strong>.</p>
+<p>Les lletres <strong>OCR</strong> (OCR-A, OCR-B i les seves variants) són les clàssiques dels codis de<br />
+barres: cada xifra està dissenyada perquè el lector la distingeixi sense errors. <strong>No<br />
+inclouen caràcters especials</strong> (la <strong>ñ</strong>, accents com ara á/é, ni símbols); és una<br />
+tipografia pròpia del codi de barres. Si el teu text necessita aquests caràcters, tria<br />
+<strong>Helvetica</strong> (a Mac) o <strong>Arial</strong> (a Windows), que són les fonts normals i sí<br />
+que els tenen.</p>
+<h2>Errors típics</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solució</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dada buida a la columna</td>
+<td>Alguna fila no té valor</td>
+<td>Omple la fila o treu aquesta fila de la columna</td>
+</tr>
+<tr>
+<td>Text massa llarg</td>
+<td>Més de ~200 caràcters</td>
+<td>Escurça el text o fes servir un PDF417 si en necessites molt més</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

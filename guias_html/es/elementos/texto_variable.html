@@ -1,0 +1,57 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guía — Texto variable</h1>
+<h2>¿Qué es y para qué sirve?</h2>
+<p>El texto variable es un elemento de la maquetación que muestra <strong>un texto</strong> en la pieza. A diferencia de la numeradora, no avanza por sí mismo con una secuencia: su valor puede ser <strong>fijo</strong> (un texto de muestra) o venir de <strong>una columna de Excel</strong> (un valor distinto para cada pieza).</p>
+<p>Sirve para imprimir datos que cambian de una pieza a otra sin numerar, como nombres, fechas, códigos, referencias o cualquier otro texto del listado.</p>
+<h2>¿De dónde sale el valor?</h2>
+<p>Puedes elegir entre dos orígenes:</p>
+<ul>
+<li><strong>Texto de muestra</strong>: escribes directamente el texto que se quiere mostrar. Vale para pruebas o cuando el valor es el mismo en todas las piezas.</li>
+<li><strong>Columna de Excel</strong>: el texto se toma de una columna del archivo de datos. Cada fila de la hoja proporciona el valor de una pieza, de modo que la pieza 1 muestra el dato de la fila 1, la pieza 2 el de la fila 2, y así sucesivamente.</li>
+</ul>
+<h2>Prefijo y sufijo</h2>
+<p>Además del texto en sí, puedes añadir un <strong>prefijo</strong> y un <strong>sufijo</strong> que se imprimen antes y después del valor (p. ej. prefijo <code>Ref.</code>, sufijo <code>(original)</code>). Estos se suman al texto y pueden llevar su propio color.</p>
+<h2>Perfiles</h2>
+<p>Cada texto variable usa un <strong>perfil</strong> que guarda cómo se ve el texto:</p>
+<ul>
+<li><strong>Fuente</strong> y <strong>estilo</strong> (regular, negrita, itálica…).</li>
+<li><strong>Tamaño</strong> de la letra.</li>
+<li><strong>Color</strong> del texto (el prefijo y el sufijo pueden colorearse aparte).</li>
+<li><strong>Prefijo y sufijo</strong>.</li>
+<li><strong>Ancla / alineación</strong>: cómo se coloca el texto dentro de su caja y respecto al punto de anclaje.</li>
+<li><strong>Interletraje</strong>: espacio extra entre letras.</li>
+</ul>
+<p>Al crear un texto variable se usa el perfil <code>&lt;Default&gt;</code>; puedes crear tantos perfiles como necesites y elegir cuál aplica cada elemento.</p>
+<h2>Colores para imprenta</h2>
+<p>Cada color (texto, prefijo y sufijo) puede definirse en el <strong>espacio de color</strong> que prefieras según el destino del impreso:</p>
+<ul>
+<li><strong>RGB</strong> (rojo, verde, azul): pensado para <strong>pantalla</strong> (vista digital, previsualización). Si solo vas a imprimir en cuatricromía, conviene usar CMYK.</li>
+<li><strong>CMYK</strong> (cian, magenta, amarillo, negro): el estándar de <strong>impresión digital y offset en cuatricromía</strong>. Es el modo habitual para trabajos comerciales.</li>
+<li><strong>Tinta plana (SPOT / Pantone)</strong>: un <strong>color concreto premezclado</strong> que se imprime en su <strong>propia plancha</strong> con su propia tinta. Es el modo correcto para <strong>colores corporativos o de marca</strong>, porque reproduce de forma exacta el color del logotipo sin depender de la mezcla de los cuatro.</li>
+</ul>
+<p>Para las tintas planas puedes:</p>
+<ul>
+<li><strong>Elegir un color spot</strong> de la lista disponible.</li>
+<li><strong>Extraer los colores spot de los PDFs cargados</strong> en el proyecto: el programa los detecta y los pone a tu disposición para que el texto use exactamente ese mismo color de marca.</li>
+<li>Ajustar el <strong>porcentaje de tinta (0-100%)</strong> de cada tinta plana, de modo que puedas usar versiones más claras del mismo color sin crear una nueva.</li>
+</ul>
+<p>Importante para imprenta: si el resultado va a imprimirse en cuatricromía, define los colores en <strong>CMYK</strong>. Ten en cuenta que el color que ves en pantalla <strong>no es el real de impresión</strong>: el monitor muestra una aproximación gestionada por el <strong>perfil de color del sistema/monitor</strong> y su calibración (por eso depende de cómo esté ajustada tu pantalla y de la luz). Además, en cuatricromía el color final <strong>no es exacto ni universal</strong>: el mismo valor CMYK depende del <strong>perfil de color (ICC)</strong> que use la imprenta en la salida para traducirlo a tinta real. Por eso puede verse distinto entre pantallas, imprentas o perfiles. Si necesitas un color exacto y reproducible, defínelo como <strong>tinta plana</strong> (Pantone), que se imprime con su tinta premezclada en su propia plancha y es independiente del perfil y de la pantalla.</p>
+<h2>Colocación</h2>
+<p>Como el resto de elementos, el texto variable se <strong>arrastra</strong> a la posición deseada de la página. Puedes <strong>girarlo</strong>, <strong>alinearlo</strong> y ajustar su tamaño. El contenido mostrado en cada pieza se actualiza según el origen elegido.</p>
+<h2>Diferencia con la numeradora</h2>
+<p>El texto variable muestra un <strong>texto fijo o desde Excel</strong>, sin numeración automática. Si lo que necesitas es una <strong>secuencia de números que avanza sola</strong> (con inicio, fin, incremento y máscara), usa la numeradora; si necesitas un dato distinto por pieza sin numerar, usa el texto variable.</p></body></html>

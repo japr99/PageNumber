@@ -1,0 +1,141 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Guía de Códigos de Barras — ISBN-13</h1>
+<hr />
+<h2>Qué es y para qué sirve</h2>
+<p>El <strong>ISBN-13</strong> es el código de barras de los <strong>libros</strong>. Es en realidad un <strong>EAN-13</strong><br />
+reservado para la numeración de libros (código ISBN). Está pensado para que librerías,<br />
+editoriales y almacenes identifiquen cada título.</p>
+<p>Puede llevar, además del código, una <strong>cabecera de texto "ISBN"</strong> encima de las barras<br />
+para que quede claro que es un libro.</p>
+<h2>Qué guarda el código</h2>
+<p>Solo <strong>números</strong> (sin letras ni símbolos), y debe cumplir dos reglas:</p>
+<ul>
+<li><strong>Exactamente 13 dígitos</strong>.</li>
+<li><strong>Debe empezar por 978 o 979</strong> (es el prefijo reservado para libros).</li>
+</ul>
+<p>El último dígito es el <strong>dígito de control</strong>, que se comprueba para que el lector sepa<br />
+si el código se ha leído bien.</p>
+<h2>Valor de muestra y columna Excel</h2>
+<p>Por defecto muestra un valor de ejemplo. También puedes usar una <strong>columna de<br />
+Excel</strong>: al seleccionarla se validan <strong>todas las filas</strong> y, si alguna está <strong>vacía</strong>,<br />
+<strong>no tiene 13 dígitos</strong>, <strong>no empieza por 978/979</strong> o <strong>el dígito de control falla</strong>,<br />
+aparece en el visor del diálogo indicando qué fila tiene el problema.</p>
+<h2>El origen de los datos</h2>
+<p>Como en todas las simbologías, el valor del código puede salir de tres sitios:</p>
+<table>
+<thead>
+<tr>
+<th>Origen</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Texto fijo</strong></td>
+<td>Escribes el valor a mano en el perfil</td>
+</tr>
+<tr>
+<td><strong>Columna de datos externos</strong></td>
+<td>El valor viene de una columna de Excel/CSV, fila a fila</td>
+</tr>
+<tr>
+<td><strong>Numeración interna</strong></td>
+<td>El valor se genera con una máscara (p. ej. <code>0000</code> → <code>0001</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Para las 3 se aplican las mismas reglas del código (tamaño, etc.).</p>
+<h2>La cabecera "ISBN" y los dígitos</h2>
+<ul>
+<li>Los <strong>dígitos van dentro del código</strong>, entre las barras (como en el EAN).</li>
+<li>Además puedes activar la <strong>cabecera "ISBN"</strong> que se dibuja <strong>encima</strong> de las barras<br />
+  con el texto <code>ISBN + número</code>. Se activa o desactiva con el campo <strong>Cabecera</strong>.</li>
+</ul>
+<h2>Campos del diálogo</h2>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ancho</strong></td>
+<td>Tamaño horizontal del código</td>
+</tr>
+<tr>
+<td><strong>Alto</strong></td>
+<td>Altura del código</td>
+</tr>
+<tr>
+<td><strong>Fuente</strong></td>
+<td>Tipo de letra de los dígitos del código</td>
+</tr>
+<tr>
+<td><strong>Cuerpo</strong></td>
+<td>Tamaño de letra de los dígitos. <strong>0 = sin texto</strong></td>
+</tr>
+<tr>
+<td><strong>Cabecera</strong></td>
+<td>Muestra u oculta el texto "ISBN" encima de las barras</td>
+</tr>
+</tbody>
+</table>
+<h2>El tipo de letra de los dígitos (Fuente)</h2>
+<p>Los dígitos del código se dibujan con la letra que elijas en el campo <strong>Fuente</strong>.</p>
+<p>Las letras <strong>OCR</strong> (OCR-A, OCR-B y sus variantes) son las clásicas de los códigos de<br />
+barras: cada cifra está diseñada para que el lector la distinga sin errores. <strong>No<br />
+incluyen caracteres especiales</strong> (la <strong>ñ</strong>, acentos como á/é, ni símbolos); es una<br />
+tipografía propia del código de barras. Como el ISBN es <strong>solo números</strong>, la OCR es la<br />
+recomendada. Si tu texto necesitara caracteres especiales, usarías Helvetica (en Mac)<br />
+o Arial (en Windows), que son las fuentes normales y sí los tienen — aunque en el ISBN<br />
+solo entran dígitos.</p>
+<h2>Errores típicos</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Debe tener 13 dígitos</td>
+<td>El ISBN tiene otra longitud</td>
+<td>Comprueba la cifra (13 dígitos)</td>
+</tr>
+<tr>
+<td>Debe comenzar con 978 o 979</td>
+<td>El prefijo no es de libro</td>
+<td>Usa un ISBN válido (978/979)</td>
+</tr>
+<tr>
+<td>El dígito de control no coincide</td>
+<td>Última cifra mal calculada</td>
+<td>Recalcula el dígito de control</td>
+</tr>
+<tr>
+<td>Dato vacío en columna</td>
+<td>Alguna fila no tiene valor</td>
+<td>Rellena la fila o quita esa fila de la columna</td>
+</tr>
+</tbody>
+</table>
+<hr /></body></html>

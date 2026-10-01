@@ -1,0 +1,726 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Guia</title><style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11pt;
+       color:#1a1a1a; line-height:1.45; margin:18mm 16mm; }
+h1 { font-size:20pt; color:#0b5a8a; border-bottom:2px solid #0b5a8a;
+     padding-bottom:6px; margin-top:0; }
+h2 { font-size:15pt; color:#0b5a8a; margin-top:22px; border-bottom:1px solid #c9dce8;
+     padding-bottom:3px; }
+h3 { font-size:12.5pt; color:#333; margin-top:16px; }
+p { margin:8px 0; }
+ul, ol { margin:6px 0; padding-left:22px; }
+li { margin:3px 0; }
+table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10pt; }
+th, td { border:1px solid #bbb; padding:5px 8px; text-align:left; }
+th { background:#eef4f8; }
+code { font-family:Consolas,monospace; background:#f4f4f4; padding:1px 4px; font-size:95%; }
+</style></head><body><h1>Barcode Guide — DataMatrix</h1>
+<hr />
+<h2>1. DataMatrix (symbology family)</h2>
+<p>DataMatrix is a two-dimensional code that can work in <strong>three different<br />
+ways</strong>, depending on the option you choose in the selector:</p>
+<table>
+<thead>
+<tr>
+<th>Selector option</th>
+<th>What the code stores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Custom DataMatrix</strong></td>
+<td>Any free text (your own data, multiple lines, a URL…)</td>
+</tr>
+<tr>
+<td><strong>GS1 DataMatrix</strong></td>
+<td>GS1 data in <code>(AI)value</code> format: <code>(01)...(17)...</code></td>
+</tr>
+<tr>
+<td><strong>DataMatrix GS1 Digital Link</strong></td>
+<td>The same GS1 data, but within a <strong>web address (URL)</strong></td>
+</tr>
+</tbody>
+</table>
+<p>All three share the <strong>physical configuration</strong> of the code (size, format, and<br />
+human-readable text under the symbol), which is explained at the end of this section. What<br />
+changes between them is <strong>what you write in the data</strong>. Each one is detailed<br />
+below.</p>
+<hr />
+<h3>1.1 Custom DataMatrix</h3>
+<p>This is the "standard" DataMatrix: it stores <strong>whatever you want</strong>, without validating any<br />
+standard. It only checks that it is not empty.</p>
+<ul>
+<li><strong>Single line:</strong> type the text directly.</li>
+<li><strong>Multiple lines:</strong> use the separator character (<code>\|</code> by default) between each<br />
+  text; each separated block becomes a different line.</li>
+</ul>
+<p>Examples:</p>
+<pre><code>Customer: 1001 | Name: Maria Garcia Lopez | ID: 12345678Z
+ABC12345
+https://example.com/product
+</code></pre>
+<p>The first one generates 3 readable lines (one for each <code>|</code>). The others generate a single<br />
+line. This is useful for entering your own software data without following GS1.</p>
+<h4>Adapting the code to the reader (field start and end)</h4>
+<p>To let the reader app distinguish each field, you define two controls:</p>
+<ul>
+<li><strong>Opening</strong>: the character that marks the <em>start</em> of each field.</li>
+<li><strong>Closing</strong>: the character that marks the <em>end</em> of each field.</li>
+</ul>
+<p>The program splits the data into fields using these characters (removes the initial<br />
+opening, splits on <code>closing+opening</code>, removes the closing from the last one). Each field<br />
+appears as a readable line under the code so the reader app can identify<br />
+where one field ends and the next begins.</p>
+<ul>
+<li><strong>Internal value</strong> — the "Edit text" button opens a window: you type the<br />
+  data, define opening and closing, and see <strong>live</strong> how each field looks.</li>
+<li><strong>External data</strong> — when you choose the column, the program tries to detect the<br />
+  separator automatically (it tries several characters until it finds the one that<br />
+  splits the rows into the same number of fields). This is only a <strong>suggestion and is not<br />
+  entirely reliable</strong> — if the character also appears within the data<br />
+  (e.g. commas in an address) or the rows do not always have the same number<br />
+  of fields, it may pick the wrong candidate or fall back to <code>|</code> by<br />
+  default—; always verify that Opening and Closing match the actual separator.</li>
+</ul>
+<p>In the example data files, there are columns with different separators you can<br />
+try:</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Separator</th>
+<th>Opening / Closing in the profile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>datamatrix_pipe</code></td>
+<td><code>\|</code></td>
+<td>empty / <code>\|</code></td>
+</tr>
+<tr>
+<td><code>datamatrix_semicolon</code></td>
+<td><code>;</code></td>
+<td>empty / <code>;</code></td>
+</tr>
+<tr>
+<td><code>datamatrix_chevron</code></td>
+<td><code>&lt;&lt;</code> <code>&gt;&gt;</code></td>
+<td><code>&lt;&lt;</code> / <code>&gt;&gt;</code></td>
+</tr>
+<tr>
+<td><code>datamatrix_brace</code></td>
+<td><code>{</code> <code>}</code></td>
+<td><code>{</code> / <code>}</code></td>
+</tr>
+</tbody>
+</table>
+<p>Example with opening <code>&lt;&lt;</code> and closing <code>&gt;&gt;</code>:</p>
+<pre><code>&lt;&lt;Customer: 1001&gt;&gt;&lt;&lt;Name: Maria Garcia Lopez&gt;&gt;&lt;&lt;ID: 12345678Z&gt;&gt;
+</code></pre>
+<p>→ three fields: "Customer: 1001", "Name: Maria Garcia Lopez", "ID: 12345678Z".</p>
+<p>With Opening empty and Closing <code>|</code>, this is the classic behavior:<br />
+<code>Customer: 1001 | Name: ... | ID: ...</code>.</p>
+<blockquote>
+<p>With both separators empty, the data is a single field.</p>
+</blockquote>
+<p>These text lines do not have to always appear under the code: you can<br />
+<strong>position them</strong> anywhere around it (<strong>below, above,<br />
+to the left, or to the right</strong>) and <strong>align them</strong> in the 9 possible positions<br />
+(top / middle / bottom × left / center / right) using the<br />
+<strong>HRI Position</strong> and <strong>HRI Alignment</strong> fields in the profile.</p>
+<hr />
+<h3>1.2 GS1 DataMatrix</h3>
+<p>A variant for product identification using the GS1 standard. Data is<br />
+organized by <em>Application Identifiers</em> (AI) — each AI is a number that<br />
+identifies what the following value means.</p>
+<h4>Input format</h4>
+<p>Each block is written as <code>(AI)value</code> with no spaces between blocks:</p>
+<pre><code>(01)09506000117843(17)250124(10)POIG8F(21)1CBFNO6B9M
+</code></pre>
+<p>The parentheses are only for human readability. When the code is generated they are removed and<br />
+an invisible separator character is injected between variable-length fields.</p>
+<h4>Common examples</h4>
+<table>
+<thead>
+<tr>
+<th>Use</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Product + batch + date</td>
+<td><code>(01)09506000117843(17)250124(10)LOTE001</code></td>
+</tr>
+<tr>
+<td>Product + serial</td>
+<td><code>(01)09506000117843(21)SERIE12345</code></td>
+</tr>
+<tr>
+<td>Product + batch + serial</td>
+<td><code>(01)09506000117843(10)LOTE001(21)SERIE12345</code></td>
+</tr>
+</tbody>
+</table>
+<h4>Supported AIs (GS1)</h4>
+<table>
+<thead>
+<tr>
+<th>AI</th>
+<th>Meaning</th>
+<th>Format</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00</td>
+<td>SSCC (case code)</td>
+<td>18 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td><strong>01</strong></td>
+<td><strong>GTIN (product code)</strong></td>
+<td><strong>14 digits</strong></td>
+<td><strong>Fixed</strong></td>
+</tr>
+<tr>
+<td>02</td>
+<td>GTIN of contents</td>
+<td>14 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Batch / Lot</td>
+<td>1-20 characters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Manufacturing date (YYMMDD)</td>
+<td>6 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Payment date (YYMMDD)</td>
+<td>6 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Packaging date (YYMMDD)</td>
+<td>6 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Best-before date (YYMMDD)</td>
+<td>6 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Recommended sale date (YYMMDD)</td>
+<td>6 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td><strong>17</strong></td>
+<td><strong>Expiry date (YYMMDD)</strong></td>
+<td><strong>6 digits</strong></td>
+<td><strong>Fixed</strong></td>
+</tr>
+<tr>
+<td>20</td>
+<td>Product variant</td>
+<td>2 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td><strong>21</strong></td>
+<td><strong>Serial number</strong></td>
+<td><strong>1-20 characters</strong></td>
+<td><strong>Variable</strong></td>
+</tr>
+<tr>
+<td>22</td>
+<td>Product version</td>
+<td>1-20 characters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Unit count</td>
+<td>1-8 digits</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>240</td>
+<td>Additional manufacturer code</td>
+<td>1-30 characters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>241</td>
+<td>Component code</td>
+<td>1-30 characters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>242</td>
+<td>Pet food ID</td>
+<td>1-6 digits</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>250</td>
+<td>Shipment serial number</td>
+<td>1-30 characters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>251</td>
+<td>Primary source link</td>
+<td>1-30 characters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>253</td>
+<td>GDTI (document)</td>
+<td>13 digits + 17 chars</td>
+<td>Composite</td>
+</tr>
+<tr>
+<td>254</td>
+<td>Origin GLN</td>
+<td>13 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>255</td>
+<td>GCN (coupon)</td>
+<td>13 digits + 12 digits</td>
+<td>Composite</td>
+</tr>
+<tr>
+<td>310x</td>
+<td>Net weight kg</td>
+<td>6 digits (x=decimal)</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>311x</td>
+<td>Length m</td>
+<td>6 digits (x=decimal)</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>312x</td>
+<td>Width m</td>
+<td>6 digits (x=decimal)</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>313x</td>
+<td>Height / Thickness m</td>
+<td>6 digits (x=decimal)</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>314x</td>
+<td>Area m²</td>
+<td>6 digits (x=decimal)</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>315x</td>
+<td>Net volume l</td>
+<td>6 digits (x=decimal)</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>316x</td>
+<td>Net volume m³</td>
+<td>6 digits (x=decimal)</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>320x</td>
+<td>Net weight lb</td>
+<td>6 digits (x=decimal)</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>330x</td>
+<td>Gross weight kg</td>
+<td>6 digits (x=decimal)</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>340x</td>
+<td>Area yd²</td>
+<td>6 digits (x=decimal)</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Purchase order number</td>
+<td>1-30 characters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>401</td>
+<td>GINC (shipment identification)</td>
+<td>1-30 characters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>402</td>
+<td>GSIN (consignment)</td>
+<td>17 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Route code</td>
+<td>1-30 characters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>410</td>
+<td>Buyer GLN</td>
+<td>13 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>411</td>
+<td>Billing GLN</td>
+<td>13 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>412</td>
+<td>Distributor GLN</td>
+<td>13 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>413</td>
+<td>Final recipient GLN</td>
+<td>13 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>414</td>
+<td>Physical location GLN</td>
+<td>13 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>415</td>
+<td>Supplier GLN</td>
+<td>13 digits</td>
+<td>Fixed</td>
+</tr>
+<tr>
+<td>420</td>
+<td>National postal code</td>
+<td>1-20 characters</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>421</td>
+<td>International postal code</td>
+<td>3 digits + 9 chars</td>
+<td>Composite</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Country of origin</td>
+<td>3 digits (ISO)</td>
+<td>Fixed</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note:</strong> AIs in <strong>bold</strong> are the most commonly used. "Fixed" type AIs are<br />
+automatically validated (exact length, digits only). If you use a "Composite"<br />
+type AI, the basic validation checks that it has a value but does not validate each<br />
+part.</p>
+</blockquote>
+<h4>Excel column</h4>
+<p>Each cell must contain the complete format with parentheses:</p>
+<pre><code>(01)09506000117843(17)250124(10)POIG8F(21)1CBFNO6B9M
+</code></pre>
+<p>When you select the column, <strong>all rows</strong> are validated. If there are errors they appear<br />
+in the dialog viewer indicating which rows fail and why. GS1 data is not<br />
+split by separators: it uses its own structure, which is why the "GS1 data detected"<br />
+label is displayed.</p>
+<h4>Common errors</h4>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AI 01 must have 14 digits (GTIN)</code></td>
+<td>The GTIN has 13 digits</td>
+<td>Add a 0 at the beginning</td>
+</tr>
+<tr>
+<td><code>AI 17 must have 6 digits (YYMMDD)</code></td>
+<td>The date has fewer than 6</td>
+<td>Use YYMMDD format (e.g. 250124)</td>
+</tr>
+<tr>
+<td><code>AI 01 must be numeric</code></td>
+<td>The GTIN contains letters</td>
+<td>Check the value, digits only</td>
+</tr>
+<tr>
+<td><code>AI 10 has no value</code></td>
+<td>The batch is empty</td>
+<td>Add the batch number</td>
+</tr>
+<tr>
+<td><code>Invalid GS1 HRI format</code></td>
+<td>Format not recognized</td>
+<td>Use <code>(AI)value</code> with no spaces between blocks</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>1.3 DataMatrix GS1 Digital Link</h3>
+<blockquote>
+<p>Source for this explanation: GS1 Digital Link standard from GS1 Spain<br />
+(<a href="https://www.gs1es.org/estandares-gs1-identificar/gs1-digital-link/">https://www.gs1es.org/estandares-gs1-identificar/gs1-digital-link/</a>).</p>
+</blockquote>
+<h4>What is it?</h4>
+<p><strong>GS1 Digital Link</strong> is the GS1 standard that <strong>embeds the GS1 identification<br />
+system within a web address (URL)</strong>. The barcode no longer<br />
+stores just "the product number" but rather <strong>a link</strong> that leads to that product's web page.</p>
+<p>The great advantage is how it is <strong>read</strong>: today, most people carry a phone that<br />
+does not understand a classic GS1 code, but <strong>any phone can scan a URL with the camera</strong><br />
+and open the web page automatically. Although GS1 Digital Link became popular with QR codes,<br />
+it can also go into a <strong>DataMatrix</strong>, which is exactly this option in the selector.</p>
+<h4>What does it bring to your client (and to you)?</h4>
+<ul>
+<li><strong>Direct access to content</strong>: the consumer scans and sees ingredients,<br />
+  allergens, usage instructions, recipes, related products, or the brand's<br />
+  online store.</li>
+<li><strong>Fewer labels</strong>: concentrates all the information that today would<br />
+  require printing several labels or codes into a single code.</li>
+<li><strong>Traceability</strong>: with the batch, expiry date, or best-before date inside<br />
+  the code, expired products, those with food alerts, or counterfeit items can be<br />
+  removed from the warehouse.</li>
+<li><strong>Easier returns</strong> for the distributor and <strong>better data exchange</strong><br />
+  with business partners.</li>
+<li><strong>Gradual implementation</strong>: you can start with just the <strong>GTIN</strong> (the simplest<br />
+  case) and add more "application identifiers" as needed.</li>
+<li><strong>Sustainability and digital product passport</strong>: enables linking carbon footprint,<br />
+  recycling, or refurbishment data (a requirement driven by the<br />
+  European Union).</li>
+</ul>
+<h4>How does it differ from the traditional GS1 DataMatrix?</h4>
+<p>Both use the <strong>same identifiers (AI)</strong> and are <strong>functionally<br />
+equivalent</strong>: they say the same thing about the product. The difference is only <strong>how the data is<br />
+written</strong>:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>GS1 DataMatrix (element string)</th>
+<th>GS1 Digital Link (URL)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>How it is written</td>
+<td><code>(01)09506000117843(17)250124</code></td>
+<td><code>https://id.gs1.org/01/09506000117843/...</code></td>
+</tr>
+<tr>
+<td>What reads it</td>
+<td>Industrial scanners</td>
+<td>Phone with camera (opens the web)</td>
+</tr>
+<tr>
+<td>Purpose</td>
+<td>Inventory and logistics</td>
+<td>Connecting with the consumer and the web</td>
+</tr>
+</tbody>
+</table>
+<h4>Input format</h4>
+<p>A GS1 Digital Link is a <strong>URL</strong> that includes the GS1 domain and, then,<br />
+identifiers (AI) separated by forward slashes <code>/</code>. Variable-length<br />
+fields (like batch or serial number) are also written in the<br />
+link and, if needed, date fields go at the end as <code>?</code> parameters:</p>
+<pre><code>https://id.gs1.org/01/{GTIN}/10/{lot}?17={expiry}&amp;21={serial}
+</code></pre>
+<p>Real example:</p>
+<pre><code>https://id.gs1.org/01/09506000117843/10/POIG8F?17=250124&amp;21=1CBFNO6B9M
+</code></pre>
+<h4>Common examples</h4>
+<table>
+<thead>
+<tr>
+<th>Use</th>
+<th>Example (GS1 Digital Link URL)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Product + batch + serial</td>
+<td><code>https://id.gs1.org/01/09506000117843/10/LOTE001?21=SERIE12345</code></td>
+</tr>
+<tr>
+<td>Product + batch + date</td>
+<td><code>https://id.gs1.org/01/09506000117843/10/LOTE001?17=250124</code></td>
+</tr>
+<tr>
+<td>Product + serial + date</td>
+<td><code>https://id.gs1.org/01/09506000117843/10/LOTE001?17=250124&amp;21=SERIE12345</code></td>
+</tr>
+</tbody>
+</table>
+<h4>Important rule with dates</h4>
+<p><strong>Fixed-length date identifiers</strong> (like <code>17</code> for expiry, <code>15</code> for<br />
+best-before…) can appear in the link <strong>before</strong> a variable-length<br />
+field, but <strong>once a variable-length field appears (like batch <code>10</code> or serial<br />
+<code>21</code>), dates move to the <code>?</code> parameters at the end</strong>. This rule is<br />
+enforced by the standard itself and the program <strong>validates it automatically</strong>.</p>
+<h4>Excel column</h4>
+<p>You can use an Excel column with a <strong>full GS1 Digital Link URL</strong> per cell.<br />
+When you select the column, <strong>all rows</strong> are validated: each value <strong>must be<br />
+a valid GS1 Digital Link URL</strong> (any random web address will not work).</p>
+<ul>
+<li>If you need to store a free URL without validation, use the<br />
+<strong>Custom DataMatrix</strong> variant instead of this one.</li>
+</ul>
+<h4>Common errors</h4>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Invalid GS1 Digital Link URI: ...</code></td>
+<td>The address does not meet the standard</td>
+<td>Check that it starts with <code>https://id.gs1.org/01/...</code></td>
+</tr>
+<tr>
+<td><code>Invalid GS1 Digital Link URI</code></td>
+<td>You entered a plain URL without GTIN 01</td>
+<td>Use Custom DataMatrix or add <code>01/{GTIN}</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Tip:</strong> if the data is a long link, remember that, as with the other two<br />
+variants, the code gets <strong>larger and more square</strong> (see "Code sizes"<br />
+below). With very long URLs only the square format will be available.</p>
+</blockquote>
+<h4>Dialog fields</h4>
+<p>These are <strong>the same</strong> as the rest of the DataMatrix family (see 1.4). In this<br />
+variant there are no field separators: the human-readable text under the code shows the<br />
+full URL.</p>
+<hr />
+<h3>1.4 Common to the family (code configuration)</h3>
+<h4>Dialog fields</h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Width</strong></td>
+<td>Horizontal size of the code in mm</td>
+</tr>
+<tr>
+<td><strong>Height</strong></td>
+<td>The 3 available GS1 sizes — choose the one you prefer <em>(if the data is long, there will only be 1: the square one)</em></td>
+</tr>
+<tr>
+<td><strong>Format</strong></td>
+<td>Square (automatic) or rectangular</td>
+</tr>
+<tr>
+<td><strong>HRI Font</strong></td>
+<td>Typeface of the human-readable text under or above the code</td>
+</tr>
+<tr>
+<td><strong>HRI Body</strong></td>
+<td>Text font size. 0 = no text</td>
+</tr>
+<tr>
+<td><strong>HRI Distance</strong></td>
+<td>Space between the code and the text</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>To hide the human-readable text, set Body to 0</strong>: the code remains alone,<br />
+with no text around it.</p>
+</blockquote>
+<h4>Text typeface (Font)</h4>
+<p>The human-readable text that accompanies the code is drawn with the typeface you<br />
+select in the <strong>Font</strong> field.</p>
+<p><strong>OCR</strong> fonts (OCR-A, OCR-B, and their variants) are the classic barcode fonts:<br />
+each digit is designed so the reader can distinguish it without error. They <strong>do<br />
+not include special characters</strong> (the <strong>ñ</strong>, accents like á/é, or symbols); they are a<br />
+typeface specific to barcodes. If your text needs those characters, choose<br />
+<strong>Helvetica</strong> (on Mac) or <strong>Arial</strong> (on Windows), which are standard fonts that do<br />
+include them.</p>
+<h4>Code sizes</h4>
+<ul>
+<li>The <strong>Height</strong> is not typed: it is a selector with the <strong>3 standard GS1 sizes</strong> that<br />
+  are calculated based on the width for DataMatrix <em>(if the data is long, there will only be 1:<br />
+  the square one)</em>.</li>
+<li>Choose the one that best fits your label; the program calculates the rest.</li>
+</ul>
+<h4>How is the minimum size calculated?</h4>
+<p>A barcode <strong>cannot be smaller than what its own data<br />
+allows</strong>: the more data it contains, the more modules it needs and the larger the minimum<br />
+width.</p>
+<p>The program calculates that minimum from the data you are going to print:</p>
+<ul>
+<li><strong>With a sample value:</strong> the minimum is calculated from that single value.</li>
+<li><strong>With an Excel column:</strong> all rows are scanned and the<br />
+  size each one would generate is calculated. The final minimum is from the <strong>row with<br />
+  the most data</strong> (the one that generates the largest code).</li>
+</ul>
+<p>This way, even if each row has a different amount of data, <strong>all codes in the<br />
+column are printed at the same size</strong>: the minimum needed for the largest code<br />
+to fit.</p>
+<blockquote>
+<p>If you enter a width smaller than the minimum, the program automatically adjusts<br />
+it to the minimum value. The <strong>Height</strong> selector is recalculated to offer you the 3<br />
+possible GS1 sizes for that width.</p>
+</blockquote>
+<h4>Long data → square only</h4>
+<p>Due to GS1 standard limitations, rectangular formats (16×36, 16×48) only<br />
+accept up to <strong>49 characters</strong>.</p>
+<ul>
+<li><strong>Data ≤ 49 characters</strong> → 3 height options (square + 2 rectangular).</li>
+<li><strong>Data &gt; 49 characters</strong> → only the square remains: the <strong>height does not change</strong> (it<br />
+  equals the width) and the height selector shows only 1 option.</li>
+</ul>
+<p>Summary: the longer the data, the larger and more square the code. <strong>This is not a<br />
+program error; it is a GS1 standard limitation.</strong></p>
+<hr /></body></html>
