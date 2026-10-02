@@ -21,5 +21,3 @@ pip install -r requirements-mac.txt        # macOS (adds pyobjc)
 ## Licencia
 
 AGPL-3.0 — GNU Affero General Public License versión 3. Ver el fichero `LICENSE` para el texto completo.
-
-> **Aviso sobre PyMuPDF**: este proyecto usa [PyMuPDF](https://pymupdf.readthedocs.io/), que se distribuye bajo AGPL-3.0 **o** licencia comercial de Artifex. Al distribuir PageNumber bajo AGPL-3.0 se cumple la opción libre: si prefieres usarlo en un producto cerrado, necesitas una licencia comercial de Artifex.
