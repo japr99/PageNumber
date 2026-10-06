@@ -1,6 +1,6 @@
 # PageNumber
 
-PageNumber es un software para numerar y crear códigos de barras con dato variable y texto variable en páginas a una cara o a doble cara diseñado para usar con TalNumStack o su software de imposición, su salida es en PDF.
+PageNumber es un software para numerar y crear códigos de barras con dato variable y texto variable en páginas a una cara o a doble cara diseñado para usar con TalNumstack o su software de imposición, su salida es en PDF.
 
 **Web y descargas:** https://japr.my.canva.site/talnumstack-pagenumber-es
 
