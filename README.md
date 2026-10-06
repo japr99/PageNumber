@@ -6,10 +6,7 @@ PageNumber es un software para numerar y crear códigos de barras con dato varia
 
 ## Ejecutar
 
-```bash
-.venv/bin/python page_number_app.py      # macOS
-# .venv\Scripts\python page_number_app.py  # Windows
-```
+page_number_app.py
 
 Python 3.14.
 
