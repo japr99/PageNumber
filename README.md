@@ -11,7 +11,7 @@ PageNumber es un software para numerar y crear códigos de barras con dato varia
 # .venv\Scripts\python page_number_app.py  # Windows
 ```
 
-Usar SIEMPRE el venv del root. Python 3.14. Interfaz con Flet 1.0.1.
+Python 3.14.
 
 ## Dependencias
 
